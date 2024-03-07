@@ -1,21 +1,23 @@
 const express = require('express')
 const { getAsignaturas, createAsignaturas, deleteAsignaturas, updateAsignaturas } = require("../controller/asignaturas.controller.js")
-const { updateArea } = require('../controller/areas.controller.js')
-const router = express.Router()
+const  authMidd  = require('../middleware/sesion.js')
+
+
+const asignaturasRoutes = express.Router()
 
 
 //obtener listado de asignaturas
-router.get("/" ,getAsignaturas )
+asignaturasRoutes.get("/appi/asignaturas",authMidd , getAsignaturas )
 
 
 //crear una asignatura
-router.post("/", createAsignaturas)
+asignaturasRoutes.post("/",  authMidd,  createAsignaturas)
 
 
 //eliminar asignatura
-router.delete("/:asigcod" ,deleteAsignaturas)
+asignaturasRoutes.delete("/:asigcod",authMidd ,deleteAsignaturas)
 
 //actualizar una asignatura
-router.put("/:asigcod", updateAsignaturas)
+asignaturasRoutes.put("/:asigcod",authMidd, updateAsignaturas)
 
-module.exports = router
+module.exports = asignaturasRoutes

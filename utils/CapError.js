@@ -4,7 +4,7 @@
 
 const HanledError = (res, message ="Error por defecto " , code = 403 ) => {
     res.status(code)
-    res.send({error:message})
+    res.json({error:message})
 
 }
 

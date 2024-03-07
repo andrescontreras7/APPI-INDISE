@@ -1,18 +1,26 @@
 const express = require('express');
+const  authMidd  = require('../middleware/sesion.js')
+const checkRol = require("../middleware/roles.js")
 const { getEstudiantes, createEstudiante, getEstudiante, deleteEstudiante, updateEstudiante } = require('../controller/estudiante.controller.js');
-const router = express.Router();
-
-router.get("/" , getEstudiantes)
-
-router.get("/:estudid" , getEstudiante)
-
-router.post("/" , createEstudiante)
+const loginAuth = require("../controller/loginAuth.controller.js")
+const estudianteRouter = express.Router()
 
 
-router.delete("/:estudid" , deleteEstudiante)
+estudianteRouter.get("/appi/estudiante", authMidd,  getEstudiantes)
 
-router.put("/:id", updateEstudiante )
+estudianteRouter.get("/appi/estudiante/:estudid" , authMidd, getEstudiante)
+
+estudianteRouter.post("/appi/estudiante" , authMidd, checkRol(),  createEstudiante)
 
 
 
-module.exports = router
+
+
+
+estudianteRouter.delete("/appi/estudiante/:estudid" , authMidd , checkRol(), deleteEstudiante)
+
+estudianteRouter.put("/appi/estudiante/:estudid", authMidd, checkRol(), updateEstudiante )
+
+
+
+module.exports = estudianteRouter

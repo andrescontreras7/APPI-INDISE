@@ -1,6 +1,7 @@
 const models = {
     areaModels: require('../models/areas'),
-    estudModels:require("../models/estudiante")
+    estudModels:require("../models/estudiante"),
+   
 
   
   };

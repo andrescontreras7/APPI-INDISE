@@ -1,4 +1,5 @@
-const {Asignatura , Area} = require("../models/areas")
+const {Asignatura , Area} = require("../models/areas");
+const { areaModels } = require("../models/index.js");
 const  {HanledError} = require('../utils/CapError.js')
 
 
@@ -10,9 +11,10 @@ const  {HanledError} = require('../utils/CapError.js')
  */
 const getAsignaturas = async (req,res) => {
     try{
+      
         const data = await Asignatura.findAll
         ({
-            include: Area,
+         
              // Incluye la tabla Area en la consulta
           });
           res.send({data})
@@ -20,6 +22,7 @@ const getAsignaturas = async (req,res) => {
           
     }catch(e){
         HanledError(res , "Eror al obtener las asignaturas mi pana " )
+        console.log(e)
 
     }
 
@@ -54,18 +57,24 @@ const getAsignatura = async(req,res) => {
  * @param {*} res 
  */
 const updateAsignaturas = async (req,res) => {
-try{
-    const {asigcod, ...body} = req.params
-
-    const   data    = await Asignatura.findByPk(asigcod)
-    res.send(data)
+    try {
+        const body = req.body;
+        const {asigcod } =req.params // Obtén el ID y los nuevos datos del cuerpo de la solicitud
     
-}catch(e){
-    HanledError(res , "error al crear asignatura")
-}
-
-}
-
+        const area = await Asignatura.findByPk(asigcod);
+         // Busca el registro por su ID
+        console.log(body)
+        if (area) {
+          await area.update(body); // Actualiza los datos del registro con los nuevos datos
+          res.status(200).json({mensagge:"exito pa"  }); // Envia la respuesta con el registro actualizado
+        } else {
+          res.status(404).send('Registro no encontrado'); // Envía una respuesta de error si el registro no existe
+        }
+      } catch (error) {
+        console.error('Error al actualizar el registro:', error);
+        res.status(500).send('Error al actualizar el registro'); // Envía una respuesta de error si ocurre alguna excepción
+      }
+    }
 
 
 /**

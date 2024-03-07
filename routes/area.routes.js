@@ -1,25 +1,25 @@
 const express = require("express");
 const {getAreas , createArea, updateArea, getArea, deleteArea} = require('../controller/areas.controller.js')
-const router = express.Router()
+const  authMidd  = require('../middleware/sesion.js')
 
-
+const areaRouter = express.Router()
 
  //obtener las areas
-router.get("/" , getAreas)
+areaRouter.get('/appi/area', authMidd , getAreas)
  
 
 //crear una nueva area
-router.post("/" , createArea)
+areaRouter.post("/appi/area" ,authMidd, createArea)
 
 //actualizar
-router.put("/:cod_area", updateArea)
+areaRouter.put("/appi/area/:cod_area",authMidd, updateArea)
 
 //obetener un detalle mediante el id
-router.get("/:cod_area", getArea)
+areaRouter.get("/appi/area/:cod_area",authMidd, getArea)
 
 
 //eliminar
-router.delete("/:cod_area", deleteArea)
+areaRouter.delete("/appi/area/:cod_area",authMidd, deleteArea)
 
 
 
@@ -33,4 +33,4 @@ router.delete("/:cod_area", deleteArea)
 
 
 
-module.exports = router
+module.exports = areaRouter

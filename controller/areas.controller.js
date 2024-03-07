@@ -1,7 +1,7 @@
 const { matchedData } = require("express-validator");
 const {Area} = require( "../models/areas.js")
 const  {HanledError} = require('../utils/CapError.js')
-
+const _ = require('lodash');
 
 
 
@@ -21,7 +21,7 @@ const getAreas = async (req, res) => {
       res.send({ data });
     } catch (error) {
       HanledError(res , "Eror al obtener las areas mi pana " )
-     
+     console.log(error)
     }
   };
 
@@ -72,10 +72,10 @@ const getArea = async (req,res) => {
  */ 
 const updateArea = async (req, res) => {
   try {
-    const { cod_area, ...body } = req.body; // Obtén el ID y los nuevos datos del cuerpo de la solicitud
+    const body = req.body;
+    const {cod_area} =req.params // Obtén el ID y los nuevos datos del cuerpo de la solicitud
 
     const area = await Area.findByPk(cod_area); // Busca el registro por su ID
-    console.log(area)
     if (area) {
       await area.update(body); // Actualiza los datos del registro con los nuevos datos
       res.send({ area }); // Envía la respuesta con el registro actualizado
@@ -101,10 +101,16 @@ const updateArea = async (req, res) => {
  */
 const createArea = async (req, res) => {
   try {
-    const dataArea  = req.body; // se obtiene el cuerpo de los datos que se ingresaran
-    const datos = await Area.create(dataArea) //asignamos a la variable datos los valores obtenidos de la base de datos 
-    res.status(200).send("creado exityosamente ")//se valida si se ingresan con exito
+    const {cod_area , are_nombre} = req.body
+      if(_.isNil(cod_area) || _.isEmpty(are_nombre) ) {
+        res.status(400).json({mensage:"hay campos vacios "})
+      
+      }                  
+    const datos = await Area.create({cod_area , are_nombre} )
+     //asignamos a la variable datos los valores obtenidos de la base de datos 
+    res.status(200).json({mensage:"creado exitosamente "})//se valida si se ingresan con exito
   } catch (error) {
+   console.log(error)
    HanledError(res , "error al crear nueva area") // se llama la funcion de captura de errores
    }
 };
