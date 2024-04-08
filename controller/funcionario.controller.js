@@ -9,10 +9,14 @@ const { Op } = require('sequelize');
 
 const getFuncionarios = async (req, res) =>{
     try {
-        const datos = req.body
-        const data  = await Funcionario.findAll(datos)
+        const datos = await Funcionario.findAll({
+          where: {
+            activo: true
+          }
+        })
 
-        res.status(200).json({data:data})
+        res.status(200).json({data:datos})
+
         
     } catch (error) {
         HanledError(res,  `ERROR ${error}`, 401)
@@ -20,7 +24,7 @@ const getFuncionarios = async (req, res) =>{
     }
 }
 
-    const createFuncionario  = async (req, res) => {
+const createFuncionario  = async (req, res) => {
         try {
           const {funcid,funccorreo,funcapellido, funcnombre,funcrol,jefe_areaFK,passwordFuncionario,telefono,rolFK    } = req.body;
           if (_.isNil(funcid)  || _.isNil(jefe_areaFK)  || _.isEmpty(passwordFuncionario)  || _.isEmpty(funccorreo) || _.isEmpty(funcapellido) || _.isEmpty(funcnombre) || _.isNil(telefono) || _.isNil(rolFK) || _.isEmpty(funcrol)){
@@ -31,9 +35,7 @@ const getFuncionarios = async (req, res) =>{
             
           }
           const passwordHash = await encrypt(passwordFuncionario)
-          console.log("Contraseña original:", passwordFuncionario);
-          console.log("Contraseña encriptada:", passwordHash);
-      
+         
           const user = await Funcionario.findOne({
            where: {
               [Op.or]: [{ funcid }, { funccorreo }]
@@ -63,12 +65,66 @@ const getFuncionarios = async (req, res) =>{
           HanledError(res, "Error al crear funcionario");
           console.log(e)
         }
-      };
+};
+
+
+const UpdateFuncionario = async (req, res) => {
+  try {
+      const { id } = req.params;
+      const body = req.body;
+
+      const funcionarioData = await Funcionario.findOne({
+          where: {
+              funcid: id
+          }
+      });
+
+      if (!funcionarioData) {
+          return res.status(404).json({ error: 'Registro no encontrado' });
+      }
+
+      await Funcionario.update(body, {
+          where: {
+              funcid: id
+          }
+      });
+      return res.status(200).json({ message: "Registro actualizado" });
+  } catch (error) {
+      console.error('Error al actualizar el registro:', error);
+      return res.status(500).json({ error: 'Error al actualizar el registro' });
+     
+  }
+};
      
 
 
+const deletedFuncionario = async (req, res) => {
+        try {
+          const { id } = req.params;
+          
+          const deleteF = await Funcionario.update(
+            { activo: false }, // Marcamos el registro como inactivo
+            {
+              where: {
+                funcid: id,
+                activo: true // Aseguramos que el registro esté activo antes de marcarlo como inactivo
+              }
+            }
+          );
+      
+          if (deleteF) {
+            res.status(200).json({mensagge:"Registro eliminado exitosamente "})
+          } else {
+            res.status(404).json({mensagge:"Registro no encontrado o ya eliminado  "})
+          }
+        } catch (error) {
+          console.log(error);
+          res.status(500).json({mensagge:"Error al eliminar el registro"});
+        }
+};
 
 
 
 
-module.exports = {getFuncionarios, createFuncionario}
+
+module.exports = {getFuncionarios, createFuncionario, deletedFuncionario, UpdateFuncionario}

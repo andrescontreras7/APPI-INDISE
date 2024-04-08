@@ -11,11 +11,11 @@ asignaturasRoutes.get("/appi/asignaturas",authMidd , getAsignaturas )
 
 
 //crear una asignatura
-asignaturasRoutes.post("/",  authMidd,  createAsignaturas)
+asignaturasRoutes.post("/appi/asignaturas",  authMidd,  createAsignaturas)
 
 
 //eliminar asignatura
-asignaturasRoutes.delete("/:asigcod",authMidd ,deleteAsignaturas)
+asignaturasRoutes.delete("/appi/asignaturas/:asigcod",authMidd ,deleteAsignaturas)
 
 //actualizar una asignatura
 asignaturasRoutes.put("/:asigcod",authMidd, updateAsignaturas)

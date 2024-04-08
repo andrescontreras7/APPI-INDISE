@@ -1,0 +1,22 @@
+reporteRouter.post('/reporte-individual', async (req, res) => {
+  const { id_usuario, mes, anio } = req.body;
+  try {
+    const asistenciasIndividuales = await Asistencias_estudiantes.findAll({
+        where: sequelize.and(
+          sequelize.where(sequelize.fn('YEAR', sequelize.col('fec_asi')), anio),
+          sequelize.where(sequelize.fn('MONTH', sequelize.col('fec_asi')), mes)
+         
+        ),
+        estudidfk : id_usuario
+       
+      });
+ 
+
+    
+
+    res.json(asistenciasIndividuales);
+  } catch (error) {
+    console.error('Error al generar el informe individual', error);
+    res.status(500).json({ error: 'Error interno del servidor' });
+  }
+});

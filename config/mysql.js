@@ -28,4 +28,5 @@ const dbconnectMysqlpa = async() => {
 
 
 }
+
 module.exports = {sequelize, dbconnectMysqlpa}

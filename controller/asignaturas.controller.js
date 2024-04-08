@@ -1,8 +1,8 @@
 const {Asignatura , Area} = require("../models/areas");
 const { areaModels } = require("../models/index.js");
 const  {HanledError} = require('../utils/CapError.js')
-
-
+const _ = require('lodash');
+const { Op } = require('sequelize');
 
 /**
  * obtener usuarios de la base de datos 
@@ -66,13 +66,12 @@ const updateAsignaturas = async (req,res) => {
         console.log(body)
         if (area) {
           await area.update(body); // Actualiza los datos del registro con los nuevos datos
-          res.status(200).json({mensagge:"exito pa"  }); // Envia la respuesta con el registro actualizado
+          res.status(200).json({mensagge:"REGISTRO ACTUALIZADO CORRECTAMENTE"  }); // Envia la respuesta con el registro actualizado
         } else {
-          res.status(404).send('Registro no encontrado'); // Envía una respuesta de error si el registro no existe
+          res.status(404).send('REGISTRO NO ENCONTRADO'); // Envía una respuesta de error si el registro no existe
         }
       } catch (error) {
-        console.error('Error al actualizar el registro:', error);
-        res.status(500).send('Error al actualizar el registro'); // Envía una respuesta de error si ocurre alguna excepción
+        res.status(500).send('ERROR AL ACTUALIZAR'); // Envía una respuesta de error si ocurre alguna excepción
       }
     }
 
@@ -83,21 +82,36 @@ const updateAsignaturas = async (req,res) => {
  * @param {*} res 
  */
 const createAsignaturas  = async (req,res) => {
-try{
-    const datosAsi = req.body
-    const datos = await Asignatura.create(datosAsi)
+    try {
+      const { asigcod, asignombre, asigdescripcion, areaFK } = req.body;
+  
+      if (_.isNil(asigcod)  || _.isEmpty(asignombre) || _.isEmpty(asigdescripcion) || _.isNil(areaFK)) {
+        return res.status(400).json({ message: "TODOS_LOS_CAMPOS_SON_REQUERIDOS" });
+      }     
+  
+      const asignaturaData = await Asignatura.findOne({
+       where: {
+          [Op.or]: [{ asigcod }, { asignombre }]
+        }
+      });
+    
+      if (!asignaturaData) {
+        const Info = await Asignatura.create({asigcod, asignombre, asigdescripcion, areaFK  })
+        return res.status(200).json({ message:"REGISTRO CREADO EXITOSAMENTE" });
+      
+      } else {
 
-    res.status(200)
-    res.send("asignatura creada exitosamente ")
+        return res.status(500).json({ message: "ERROR CAMPOS YA EXISTEN" });
+      }
+    } catch (e) {
+      HanledError(res, "ERROR AL CREAR ASIGNATURA   " );
+      console.log(e)
+  
+    }
+  };
+ 
 
-}catch(e){
-    HanledError(res, "error al crear asignatura rectifica esa monda paisano")
 
-
-
-}
-
-}
 
 
 /**
@@ -105,30 +119,34 @@ try{
  * @param {*} req 
  * @param {*} res 
  */
-const deleteAsignaturas = async (req,res) => {
-  try{
-    const {asigcod} = req.params
-    console.log(req)
-    const  deletedA    =  await Asignatura.destroy({
-        where:{
-            asigcod:asigcod
 
+
+const deleteAsignaturas = async (req, res) => {
+  try {
+    const { asigcod } = req.params;
+    
+    const deletedA = await Asignatura.update(
+      { activo: false }, // Marcamos el registro como inactivo
+      {
+        where: {
+          asigcod: asigcod,
+          activo: true // Aseguramos que el registro esté activo antes de marcarlo como inactivo
         }
-    })
-    if(deletedA ==1) {
-        res.send("registro eliminado exitosamente")
-        res.status(200)
+      }
+    );
+
+    if (deletedA) {
+      res.status(200).json({mensagge:"Registro eliminado exitosamente "})
+    } else {
+      res.status(404).send("Registro no encontrado o ya eliminado");
     }
-    res.send({datos})
-
-
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({mensagge:"Error al eliminar el registro"});
   }
-  catch(e){
-    HanledError(res ,"error al eliminar ese registro ")
-    console.log(e)
-  }
+};
 
-}
+
 
 
 

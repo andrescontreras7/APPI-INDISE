@@ -1,0 +1,88 @@
+2024-03-29T18:21:12.388Z - error: Error when starting http server on port 3001 Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1872:16)
+    at listenInCluster (node:net:1920:12)
+    at Server.listen (node:net:2008:7)
+    at C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:22:12
+    at new Promise (<anonymous>)
+    at startAsync (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:16:10)
+    at C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:50:14
+    at Object.start (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:125:13)
+    at Object.<anonymous> (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:333:30)
+    at async ListenerCollection.fire (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-core\lib\shared\listenerCollection.js:157:21)
+2024-03-29T18:21:12.390Z - error: Error occurred during reporter init: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1872:16)
+    at listenInCluster (node:net:1920:12)
+    at Server.listen (node:net:2008:7)
+    at C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:22:12
+    at new Promise (<anonymous>)
+    at startAsync (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:16:10)
+    at C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:50:14
+    at Object.start (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:125:13)
+    at Object.<anonymous> (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:333:30)
+    at async ListenerCollection.fire (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-core\lib\shared\listenerCollection.js:157:21)
+2024-03-29T18:22:32.004Z - error: Error when starting http server on port 3001 Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1872:16)
+    at listenInCluster (node:net:1920:12)
+    at Server.listen (node:net:2008:7)
+    at C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:22:12
+    at new Promise (<anonymous>)
+    at startAsync (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:16:10)
+    at C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:50:14
+    at Object.start (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:125:13)
+    at Object.<anonymous> (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:333:30)
+    at async ListenerCollection.fire (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-core\lib\shared\listenerCollection.js:157:21)
+2024-03-29T18:22:32.006Z - error: Error occurred during reporter init: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1872:16)
+    at listenInCluster (node:net:1920:12)
+    at Server.listen (node:net:2008:7)
+    at C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:22:12
+    at new Promise (<anonymous>)
+    at startAsync (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:16:10)
+    at C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:50:14
+    at Object.start (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:125:13)
+    at Object.<anonymous> (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:333:30)
+    at async ListenerCollection.fire (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-core\lib\shared\listenerCollection.js:157:21)
+2024-03-29T18:23:10.311Z - error: Error when starting http server on port 3002 Error: listen EADDRINUSE: address already in use :::3002
+    at Server.setupListenHandle [as _listen2] (node:net:1872:16)
+    at listenInCluster (node:net:1920:12)
+    at Server.listen (node:net:2008:7)
+    at C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:22:12
+    at new Promise (<anonymous>)
+    at startAsync (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:16:10)
+    at C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:50:14
+    at Object.start (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:125:13)
+    at Object.<anonymous> (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:333:30)
+    at async ListenerCollection.fire (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-core\lib\shared\listenerCollection.js:157:21)
+2024-03-29T18:23:10.313Z - error: Error occurred during reporter init: Error: listen EADDRINUSE: address already in use :::3002
+    at Server.setupListenHandle [as _listen2] (node:net:1872:16)
+    at listenInCluster (node:net:1920:12)
+    at Server.listen (node:net:2008:7)
+    at C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:22:12
+    at new Promise (<anonymous>)
+    at startAsync (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:16:10)
+    at C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:50:14
+    at Object.start (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:125:13)
+    at Object.<anonymous> (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:333:30)
+    at async ListenerCollection.fire (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-core\lib\shared\listenerCollection.js:157:21)
+2024-03-29T18:23:52.311Z - error: Error when starting http server on port 3001 Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1872:16)
+    at listenInCluster (node:net:1920:12)
+    at Server.listen (node:net:2008:7)
+    at C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:22:12
+    at new Promise (<anonymous>)
+    at startAsync (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:16:10)
+    at C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:50:14
+    at Object.start (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:125:13)
+    at Object.<anonymous> (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:333:30)
+    at async ListenerCollection.fire (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-core\lib\shared\listenerCollection.js:157:21)
+2024-03-29T18:23:52.313Z - error: Error occurred during reporter init: Error: listen EADDRINUSE: address already in use :::3001
+    at Server.setupListenHandle [as _listen2] (node:net:1872:16)
+    at listenInCluster (node:net:1920:12)
+    at Server.listen (node:net:2008:7)
+    at C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:22:12
+    at new Promise (<anonymous>)
+    at startAsync (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:16:10)
+    at C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:50:14
+    at Object.start (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:125:13)
+    at Object.<anonymous> (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-express\lib\main.js:333:30)
+    at async ListenerCollection.fire (C:\Users\mrcoc\OneDrive\Escritorio\APPI-INIDISE\node_modules\@jsreport\jsreport-core\lib\shared\listenerCollection.js:157:21)

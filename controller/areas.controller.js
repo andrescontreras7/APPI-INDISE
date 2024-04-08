@@ -20,7 +20,7 @@ const getAreas = async (req, res) => {
       const data = await Area.findAll();
       res.send({ data });
     } catch (error) {
-      HanledError(res , "Eror al obtener las areas mi pana " )
+      HanledError(res , "Ocurrió un error al recuperar los registros" )
      console.log(error)
     }
   };
