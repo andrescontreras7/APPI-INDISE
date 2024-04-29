@@ -1,6 +1,8 @@
 const { sequelize } = require("../config/mysql");
 const { DataTypes } = require("sequelize");
 const Funcionario = require("../models/funcionario.js");
+const Grado = require("../models/grado");
+
 
 const Grupo = sequelize.define(
     "grupo",
@@ -14,7 +16,7 @@ const Grupo = sequelize.define(
         type: DataTypes.STRING,
         allowNull: false,
       },
-      grupgrado: {
+      grado_FK: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -34,6 +36,7 @@ const Grupo = sequelize.define(
     );
 
 Grupo.belongsTo(Funcionario, { foreignKey: 'directorFK' });
+Grupo.belongsTo(Grado, { foreignKey: 'grado_FK' }); 
 
 
 module.exports = Grupo

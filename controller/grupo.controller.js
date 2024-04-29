@@ -11,7 +11,7 @@ try {
     const data = req.body;
 
     const datos = await Grupo.findAll(data);
-    res.status(200).json({data:{datos}})
+    res.status(200).json({data:datos})
     
 } catch (error) {
     HanledError(res,"error al obtener grupos", 404)

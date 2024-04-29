@@ -7,7 +7,7 @@ const {tokenSign} = require("../utils/handlejwt.js")
 const {encrypt , compare} =require("../utils/handlePassword.js")
 const { Op } = require('sequelize');
 const generarCodigo = require('../helpers/generarCodigo.js')
-let EmailRegistro = require('../helpers/email.js')
+const Grupo = require("../models/grupo.js");
 /**
  * obtener usuarios de la base de datos 
  * @param {*} req 
@@ -17,7 +17,7 @@ const getEstudiantes = async (req,res) => {
    try{
     const data  = req.body
     const datos = await estudModels.findAll(data)
-    res.status(200).json(datos)
+    res.status(200).send(datos)
    }
    catch(e){
     HanledError(res, "error al obtener estudiantes")
@@ -60,26 +60,42 @@ const getEstudiante = async (req,res) => {
  * @param {*} res 
  */
 const updateEstudiante = async (req, res) => {
-   try {
-       const { estudid } = req.params;
-       const body = req.body;
+    try {
+         const { estudid } = req.params;
+         const body = req.body;
 
-       const estudiante = await Estudiante.findOne({
-           where: {
-               estudid: estudid
-           }
-       });
+         const estudiante = await Estudiante.findOne({
+              where: {
+                    estudid: estudid
+              }
+         });
 
-       if (!estudiante) {
-           return res.status(404).json({ error: 'Registro no encontrado' });
-       }
+         if (!estudiante) {
+              return res.status(404).json({ error: 'Registro no encontrado' });
+         }
 
-       await estudiante.update(body);
-       return res.status(200).json({ message: "Registro actualizado" });
-   } catch (error) {
-       console.error('Error al actualizar el registro:', error);
-       return res.status(500).json({ error: 'Error al actualizar el registro' });
-   }
+     
+         if ( body.estudcorreo !== estudiante.estudcorreo) {
+              const existingEstudiante = await Estudiante.findOne({
+                    where: {
+                         estudcorreo: body.estudcorreo
+                    }
+              });
+
+              if (existingEstudiante) {
+                    return res.status(404).json({ error: 'El correo ya existe' });
+              }
+         }
+         else{
+          await estudiante.update(body);
+         }
+
+         
+         return res.status(200).json({ message: "Registro actualizado" });
+    } catch (error) {
+         console.error('Error al actualizar el registro:', error);
+         return res.status(500).json({ error: 'Error al actualizar el registro' });
+    }
 };
 
 /**
@@ -89,23 +105,30 @@ const updateEstudiante = async (req, res) => {
 */
 const createEstudiante = async (req, res) => {
    try {
-       const { estudid, estudnombre, estudapellido, estuddireccion, estudcorreo, estudtelefono, rol, password, tok} = req.body;
-       
-       if (_.isNil(estudid) || _.isEmpty(estudnombre) || _.isEmpty(estudapellido) || _.isEmpty(estuddireccion) || _.isEmpty(estudnombre) || _.isEmpty(password)) {
-           return res.status(400).json({ message: "Todos los campos son requeridos" });
-       }
+       const { estudid, estudnombre, estudapellido, estuddireccion, estudcorreo, estudtelefono, rol, password,grupoFK} = req.body;
+      
        const passwordHash = await encrypt(password);
 
        const user = await Estudiante.findOne({
            where: {
-               [Op.or]: [{ estudid }, { estudcorreo }]
+               [Op.or]: [{ estudid }, { estudcorreo }, ]
            }
        });
 
        if (user) {
            console.log("Error, el ID del estudiante o el correo ya existe");
-           return res.status(500).json({ message: "Error, el ID del estudiante o el correo ya existe" });
+           return res.status(407).json({ message: "Error, el ID del estudiante o el correo ya existe" });
        }
+       const grupoEstudianteData = await Grupo.findOne({
+        where: {
+            grupcod: grupoFK,
+          
+        }
+       })
+       if(!grupoEstudianteData){
+           return res.status(400).json({ message: "El ID del grupo ingresado no existe" });
+       }
+       
 
   const data = await Estudiante.create({
          estudid, 
@@ -116,15 +139,16 @@ const createEstudiante = async (req, res) => {
          estudtelefono, 
          rol, 
          password: passwordHash,
-         tok: generarCodigo()
+         tok: generarCodigo(),
+         grupoFK: grupoFK
         });
 
-    EmailRegistro({
+    /*send({
         email: data.estudcorreo,
         nombre: data.estudnombre,
-        token: data.tok
+       
     })
-    
+*/
     
        const token = await tokenSign({ estudid: estudid, rol: rol });
 

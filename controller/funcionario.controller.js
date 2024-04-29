@@ -58,8 +58,8 @@ const createFuncionario  = async (req, res) => {
             return res.status(200).json({ message: "funcionario   creado de manera exitosa" });
           
           } else {
-            console.log("Error, el id del estudiante o el corrreo  ya existe");
-            return res.status(500).json({ message: "Error, el id del estudiante o el corrreo  ya existe" });
+            console.log("Error, el id del funcionario o el corrreo  ya existe");
+            return res.status(500).json({ message: "Error, el id del funcionario o el corrreo  ya existe" });
           }
         } catch (e) {
           HanledError(res, "Error al crear funcionario");

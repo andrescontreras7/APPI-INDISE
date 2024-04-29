@@ -42,7 +42,7 @@ const createAcudientes = async (req, res) =>{
         }
     })
     if(acudienteData){
-        return res.status(400).json({ message: "El CORREO O EL ID YA EXISTEN " });
+        return res.status(409).json({ message: "El CORREO O EL ID YA EXISTEN " });
     }
     await Acudientes.create({
         id_acu,

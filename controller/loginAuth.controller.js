@@ -16,40 +16,42 @@ const cookieParser = require('cookie-parser');
 
 const loginAuth = async (req, res) => {
   try {
-    const { correo, password } = req.body; // se obtienen el coreo y la contraseña del cuerpo de la solicitud
+    const { correo, password } = req.body;
 
-    // Buscar en la tabla de Estudiantes
     const estudiante = await Estudiante.findOne({
       where: {
         estudcorreo: correo,
+        activo: true,
       },
     });
-    // si es un estudiante se procede a comparar la contraseña
+    
+  
 
     if (estudiante) {
       const hashPassword = estudiante.password;
-      const passwordMatch = await compare(password, hashPassword); // usando la funcion de compare definida anteriormente
+      const passwordMatch = await compare(password, hashPassword);
 
       if (!passwordMatch) {
-        HanledError(res, 'Contraseña incorrecta', 401); // si no es la contraseña devolver un mensaje de error
+        HanledError(res, 'Contraseña incorrecta', 401);
         return;
       }
 
       const user = {
-        id: estudiante.estudid,  // luego de validar que el correo y la contraseña existan se procede a crear un objeto con el id y el rol del usuario
+        id: estudiante.estudid,
         rol: estudiante.rol,
       };
 
-      const data = {
-        token: await tokenSign(user), // luego se genera un token con la funcion tokenSign
-        rol: 'estudiante',
+      const dataEstudiante = {
+        token: await tokenSign(user),
+        rol: estudiante.rol,
+        nombre: estudiante.estudnombre,
+      
       };
 
-      res.send({ data });
-      return;
+      res.status(200).json({ token: dataEstudiante });
+      return; 
     }
 
-    // Si no es un estudiante, buscar en la tabla de Funcionarios
     const funcionario = await Funcionario.findOne({
       where: {
         funccorreo: correo,
@@ -57,7 +59,7 @@ const loginAuth = async (req, res) => {
     });
 
     if (!funcionario) {
-      HanledError(res, 'Correo no encontrado', 500);
+      HanledError(res, 'Usuario no encontrado', 500);
       return;
     }
 
@@ -78,20 +80,24 @@ const loginAuth = async (req, res) => {
     const user = {
       id: funcionario.funcid,
       rol: funcionario.rolFK,
+     
     };
 
     const dataFuncionario = {
       token: await tokenSign(user),
-      rol: funcionario.funcrol,
+      rol: funcionario.rolFK,
+      nombre: funcionario.funcnombre
+   
     };
 
-    res.cookie('token', dataFuncionario.token, { httpOnly: true });
-    res.status(200).json({ data: dataFuncionario });
+    res.status(200).json({ token: dataFuncionario });
   } catch (error) {
     HanledError(res, 'Error', 404);
     console.log(error);
   }
 };
+
+module.exports = { loginAuth };
 
 module.exports = { loginAuth };
 

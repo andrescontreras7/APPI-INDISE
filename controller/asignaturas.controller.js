@@ -10,22 +10,16 @@ const { Op } = require('sequelize');
  * @param {*} res 
  */
 const getAsignaturas = async (req,res) => {
-    try{
-      
-        const data = await Asignatura.findAll
-        ({
-         
-             // Incluye la tabla Area en la consulta
-          });
-          res.send({data})
-          console.log(data)
-          
-    }catch(e){
-        HanledError(res , "Eror al obtener las asignaturas mi pana " )
-        console.log(e)
-
-    }
-
+  try{
+    const data = await Asignatura.findAll({
+      include: [Area] // Incluye la tabla Area en la consulta
+    });
+    res.json({data});
+    console.log(data);
+  } catch(e) {
+    HanledError(res, "Error al obtener las asignaturas");
+    console.log(e);
+  }
 }
 
  
@@ -37,16 +31,20 @@ const getAsignaturas = async (req,res) => {
  * @param {*} req 
  * @param {*} res 
  */
-const getAsignatura = async(req,res) => {
+const getAsignatura = async (req,res) => {
     try{
-        const {asigcod} = req.body
-        console.log(asigcod)
+        const { asigcod } = req.params;
+        const data = await Asignatura.findByPk(asigcod);
+        if (data) {
+          res.status(200).json(data);
+        } else {
+          res.status(404).send('REGISTRO NO ENCONTRADO');
+        }
+    }catch(e){
+        HanledError(res , "Eror al obtener las asignaturas mi pana " )
+        console.log(e)
 
-    } catch(e){
-        HanledError(res, "error al obtener asignatura")
     }
-
-
 }
 
 

@@ -1,6 +1,7 @@
 const { sequelize } = require("../config/mysql");
 const { DataTypes } = require("sequelize");
 const Acudiente = require("../models/acudiente.js");
+const Grupo = require("../models/grupo.js");
 const Rol = require("./rol");
 
 const Estudiante = sequelize.define(
@@ -45,12 +46,8 @@ const Estudiante = sequelize.define(
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
-        notNull: {
-          msg: "El campo 'estuddireccion' es obligatorio.",
-        },
-        notEmpty: {
-          msg: "El campo 'estuddireccion' no puede estar vacío.",
-        },
+        
+      
       },
     },
     estudcorreo: {
@@ -89,6 +86,19 @@ const Estudiante = sequelize.define(
         },
         isInt: {
           msg: "El campo 'rol' debe ser un número entero.",
+        },
+      },
+     
+    },
+    grupoFK: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: "El campo grupo es obligatorio.",
+        },
+        isInt: {
+          msg: "El campo grupo debe ser un número entero.",
         },
       },
     },
@@ -139,14 +149,7 @@ Estudiante.belongsToMany(Acudiente, { through: "EstudianteAcudiente" });
 Acudiente.belongsToMany(Estudiante, { through: "EstudianteAcudiente" });
 
 Estudiante.belongsTo(Rol, { foreignKey: "rol" });
+Estudiante.belongsTo(Grupo, { foreignKey: "grupoFK" });
 
-sequelize
-  .sync()
-  .then(() => {
-    console.log("Modelo sincronizado correctamente estudiante.");
-  })
-  .catch((error) => {
-    console.error("Error al sincronizar el modelo:", error);
-  });
 
 module.exports = Estudiante;
