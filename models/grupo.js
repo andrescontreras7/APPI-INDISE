@@ -12,10 +12,6 @@ const Grupo = sequelize.define(
         allowNull: false,
         primaryKey: true,
       },
-      grupperiodo: {
-        type: DataTypes.STRING,
-        allowNull: false,
-      },
       grado_FK: {
         type: DataTypes.STRING,
         allowNull: false,

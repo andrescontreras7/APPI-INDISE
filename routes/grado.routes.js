@@ -8,7 +8,7 @@ const  {validateGrado} = require("../validator/grado.validator.js")
 
 const gradosRoutes = express.Router();
 
-gradosRoutes.post('/appi/grados',validateGrado , authMidd, getGrados);
+gradosRoutes.get('/appi/grados' , authMidd, getGrados);
 
 gradosRoutes.post('/appi/grados/create',validateGrado , authMidd, createGrado);
 

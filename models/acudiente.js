@@ -74,13 +74,6 @@ const Acudientes = sequelize.define(
 );
 
 // Sincronizar el modelo con la base de datos
-sequelize.sync()
-  .then(() => {
-    console.log('Modelo sincronizado correctamente, acudiente.');
-  })
-  .catch(error => {
-    console.error('Error al sincronizar el modelo:', error);
-  });
 
 // Exportar el modelo de Acudientes
 module.exports = Acudientes;

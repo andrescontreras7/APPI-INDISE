@@ -1,4 +1,4 @@
-const  {HanledError} = require('../utils/CapError.js');
+const  {handleError} = require('../utils/CapError.js');
 
 const checkRol = (roles) => (req,res,next) =>{
     try {
@@ -11,12 +11,12 @@ const checkRol = (roles) => (req,res,next) =>{
 
         
          if (rolesByUser!=1 &&  rolesByUser!=2      ) {
-          HanledError(res, "NOT_PERMISION");
+            handleError(res, "NOT_PERMISION");
       } else {
           next();
       }
   } catch (error) {
-      HanledError(res, "ERROR_USER_NOT_PERMISION", 403);
+    handleError(res, "ERROR_USER_NOT_PERMISION", 403);
       console.log(error);
   }
 };

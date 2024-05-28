@@ -1,11 +1,14 @@
 
 // funcion para manerajr errores de los controladors
 
+// Función para manejar errores de los controladores
+const handleError = (res, message = "Error interno del servidor", code = 500) => {
+    // Enviar la respuesta
+    res.status(code).json({
+      success: false,
+      error: message
+    });
+  };
+  
 
-const HanledError = (res, message ="Error por defecto " , code = 403 ) => {
-    res.status(code)
-    res.json({error:message})
-
-}
-
-module.exports={HanledError}
+module.exports={handleError}

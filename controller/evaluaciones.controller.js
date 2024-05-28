@@ -1,6 +1,7 @@
-const  {HanledError} = require('../utils/CapError.js')
+const  {handleError} = require('../utils/CapError.js')
 const Evaluaciones = require('../models/evaluaciones.js');
 const _ = require('lodash');
+const Grupo = require('../models/grupo.js');
 
 
 
@@ -31,17 +32,20 @@ const getEvaluaciones = async (req, res) => {
 const createEvaluaciones = async (req, res) =>{
 
  try {
-    const {nombre_tipo_evaluacion, descripcion} = req.body;
-
-    if(_.isEmpty(nombre_tipo_evaluacion) ||  _.isEmpty(descripcion)    ){
-        return res.status(400).json({ message: "Todos los campos son requeridos" });
-
+    const {nombre_tipo_evaluacion, descripcion,url, fec_entre, id_grupo} = req.body;
+    const grupoIsvalidate = await Grupo.findOne({where: {grupcod: id_grupo, activo: true}});
+    if (!grupoIsvalidate) {
+      return res.status(400).json({ message: "El grupo no existe." });
     }
 
+    
     
     await Evaluaciones.create({
         nombre_tipo_evaluacion,
         descripcion,
+        url,
+        fec_entre,
+        id_grupo,
      
     })
      res.status(200).json({ message: "Registro creado exitosamente." });
@@ -50,7 +54,7 @@ const createEvaluaciones = async (req, res) =>{
     
     
  } catch (error) {
-    HanledError(res, "Error al crear registro.", 400)
+  handleError(res, "Error al crear registro.", 400)
     console.log(error)
     
  }
@@ -80,7 +84,7 @@ const deletedEvaluaciones = async (req, res) => {
       }
     } catch (error) {
       console.log(error);
-     HanledError(res,   {mensagge:"ERROR AL ELIMINAR REGISTRO"}  , 400);
+      handleError(res,   {mensagge:"ERROR AL ELIMINAR REGISTRO"}  , 400);
     }
   };
   

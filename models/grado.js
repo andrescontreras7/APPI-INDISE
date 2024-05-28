@@ -25,12 +25,25 @@ const Grado = sequelize.define('grado', {
     },
     descripcion: {
         type: DataTypes.STRING,
-        allowNull: true, // Asumiendo que la descripción puede ser nula
+        allowNull: true,
     },
     periodo_FK: {
         type: DataTypes.STRING,
         allowNull: false,
     },
+    activo: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: true
+      },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false
+      },
+      updatedAt: {
+        type: DataTypes.DATE,
+        allowNull: false
+      },
     año_escolar: {
         type: DataTypes.DATE,
         allowNull: false,
@@ -50,6 +63,6 @@ const Grado = sequelize.define('grado', {
     tableName: 'grado',
     timestamps: true
 });
-Grado.belongsTo(Periodo, { foreignKey: 'periodo_FK ' }); 
+Grado.belongsTo(Periodo, { foreignKey: 'periodo_FK' }); 
 
 module.exports = Grado;

@@ -2,15 +2,15 @@ const express = require("express");
 const { getAcudientes, createAcudientes, deletedAcudientes} = require('../controller/acudiente.controller.js')
 const  authMidd  = require('../middleware/sesion.js')
 const checkRol = require("../middleware/roles.js")
-
+const {acudientesValidator} = require('../validator/acudiente.validator.js')
 const acudienteRouter = express.Router()
 
  //obtener las areas
- acudienteRouter.get('/appi/acudientes', authMidd ,checkRol(), getAcudientes)
+ acudienteRouter.get('/appi/acudientes', getAcudientes)
  
 
 //crear una nueva area
-acudienteRouter.post("/appi/acudientes/create" ,authMidd, checkRol(), createAcudientes )
+acudienteRouter.post("/appi/acudientes/create" ,  authMidd, acudientesValidator,  checkRol(), createAcudientes )
 
 //actualizar
 acudienteRouter.put("/appi/acudientes/:id_acu",authMidd, checkRol() )

@@ -1,13 +1,14 @@
-const  {HanledError} = require('../utils/CapError.js');
+const  {handleError} = require('../utils/CapError.js');
 const { verifyToken } = require('../utils/handlejwt');
 const Estudiante = require("../models/estudiante.js");
 const Funcionario = require('../models/funcionario.js');
+const { LIMIT_SQL_LENGTH } = require('sqlite3');
 
 const authMidd = async(req ,res, next) => {
     try {
 
         if(!req.headers.authorization){ //accedo al header para acceder al token de sesion
-            HanledError(res,"NOT_TOKEN", 401)
+            handleError(res,"NOT_TOKEN", 401)
             return
         }
 
@@ -22,7 +23,7 @@ const authMidd = async(req ,res, next) => {
        
         // Verifica si el campo 'id' del token existe
         if(!dataToken.id){
-            HanledError(res,"ERROR_I_TOKEN ", 401)
+            handleError(res,"ERROR_I_TOKEN ", 401)
             
             return
         }
@@ -38,9 +39,9 @@ const authMidd = async(req ,res, next) => {
         else if (dataToken.rol === 3) {
             usuario = await Estudiante.findByPk(dataToken.id);
         } else {
-            HanledError(res, "INVALID_USER_TYPE", 401);
+            handleError(res, "INVALID_USER_TYPE", 401);
             return;
-        }
+        }  LIMIT_SQL_LENGTH
        // Asigna el objeto de usuario al objeto 'req' para su uso en las rutas
         req.usuarios = usuario;
         console.log(req.usuarios)
@@ -54,7 +55,7 @@ const authMidd = async(req ,res, next) => {
 
 
     } catch (error) {
-        HanledError(res, "NOT_SESION" , 401)
+        handleError(res, "NOT_SESION" , 401)
         console.log(error)
     }
 }

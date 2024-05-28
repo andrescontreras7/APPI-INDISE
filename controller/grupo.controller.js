@@ -2,7 +2,7 @@ const  {HanledError} = require('../utils/CapError.js')
 const Grupo = require('../models/grupo.js');
 const _ = require('lodash');
 const { where } = require('sequelize');
-
+const Grado = require('../models/grado.js');
 
 const getGrupo = async (req,res) =>{
    
@@ -11,7 +11,7 @@ try {
     const data = req.body;
 
     const datos = await Grupo.findAll(data);
-    res.status(200).json({data:datos})
+    res.status(200).json(datos);
     
 } catch (error) {
     HanledError(res,"error al obtener grupos", 404)
@@ -26,42 +26,49 @@ try {
  * @param {} req 
  * @param {*} res 
  */
-const createGrupo = async (req,res) =>{
-   try {
-    const {grupcod, grupperiodo, grupgrado,grupsalon,directorFK } = req.body;
+const createGrupo = async (req,res) => {
+    try {
+     const {grupcod,grado_FK,grupsalon,directorFK } = req.body;
+ 
+     const grupoData = await Grupo.findOne({
+         where: {
+             grupcod : grupcod 
+         }
+     });
+ 
+     if(!grupoData) {
+ 
+         // Verificar si el grado_FK existe
+         const gradoData = await Grado.findOne({
+             where: {
+                 gradocod: grado_FK,
+             }
+         });
+ 
+         if(!gradoData){
+             return res.status(400).json({ message: "El ID del grado ingresado no existe" });
+         }
+ 
+         const data = await Grupo.create({
+             grupcod: grupcod,
+             grupperiodo: grupperiodo,
+             grupgrado: grupgrado,
+             grupsalon: grupsalon,
+             directorFK: directorFK,
+             grado_FK: grado_FK
+         });
+ 
+         res.status(200).json({data: "creado exitosamente "}) 
+     }
+     else{
+         res.status(400).json({data: " IS ALREADY EXIST "}) 
+     }
+ 
+    } catch (error) {
     
-
-    if(_.isNil(grupcod)   || (_.isEmpty((grupperiodo) || _.isEmpty(grupgrado) || _.isEmpty(grupsalon) || _.isNil(directorFK)))) {
-        res.status(404).json({"error":"TODOS LOS CAMPOS SON REQUERIDOS"})
-    } 
-    else {
-  
-    const grupoData = await Grupo.findOne({
-        where: {
-            grupcod : grupcod 
-        }
-
-    });
-    if(!grupoData) {
-
-    const data = await Grupo.create({
-        grupcod: grupcod,
-        grupperiodo: grupperiodo,
-        grupgrado: grupgrado,
-        grupsalon: grupsalon,
-        directorFK: directorFK
-    });
-    res.status(200).json({data: "creado exitosamente "}) 
+     HanledError(res,"error:", error,404)
     }
-    else{
-        res.status(400).json({data: " IS ALREADY EXIST "}) 
-    }
-}
-   } catch (error) {
-   
-    HanledError(res,"error:", error,404)
-   }
-}
+ }
 
 const updateGrupo = async (req, res) => {
     try {

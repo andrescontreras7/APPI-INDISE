@@ -1,29 +1,47 @@
 
-const { estudModels } = require("../models/index.js")
-const  {HanledError} = require('../utils/CapError.js');
+const  {hanledError} = require('../utils/CapError.js');
 const Estudiante = require("../models/estudiante.js");
 const _ = require('lodash');
 const {tokenSign} = require("../utils/handlejwt.js")
 const {encrypt , compare} =require("../utils/handlePassword.js")
 const { Op } = require('sequelize');
 const generarCodigo = require('../helpers/generarCodigo.js')
+const Acudiente = require('../models/acudiente.js') //
 const Grupo = require("../models/grupo.js");
+const Grado = require("../models/grado.js");
+
 /**
  * obtener usuarios de la base de datos 
  * @param {*} req 
  * @param {*} res 
  */
 const getEstudiantes = async (req,res) => {
-   try{
-    const data  = req.body
-    const datos = await estudModels.findAll(data)
-    res.status(200).send(datos)
-   }
-   catch(e){
-    HanledError(res, "error al obtener estudiantes")
-   }
+  try{
+    const  datos_activos = await Estudiante.findAll({
+     
+     include: [
+      {
+        model: Acudiente,
+        attributes: { exclude: ['activo', 'createdAt', 'updatedAt'] }, // Excluir campos del modelo Acudiente
+       
+       },
+       {
+        model: Grupo, 
+        include: {model: Grado, attributes: { exclude: ['createdAt', 'updatedAt'] }}, // Excluir campos del modelo Grado
+        attributes: { exclude: ['activo', 'createdAt', 'updatedAt'] } // Excluir campos del modelo Grupo
+       },
+       
+     ]
+    })
+    res.status(200).json({data: datos_activos})
+  }
 
+  catch(e){
+      hanledError(res, "Error al recuperar los registros", 500)
+
+  }
 }
+
 
 
 
@@ -51,6 +69,8 @@ const getEstudiante = async (req,res) => {
    }
 
 }
+
+
 
 
 
@@ -105,7 +125,7 @@ const updateEstudiante = async (req, res) => {
 */
 const createEstudiante = async (req, res) => {
    try {
-       const { estudid, estudnombre, estudapellido, estuddireccion, estudcorreo, estudtelefono, rol, password,grupoFK} = req.body;
+       const { estudid, estudnombre, estudapellido, estuddireccion, estudcorreo, estudtelefono, rol, password,grupoFK,acudienteFK} = req.body;
       
        const passwordHash = await encrypt(password);
 
@@ -128,6 +148,15 @@ const createEstudiante = async (req, res) => {
        if(!grupoEstudianteData){
            return res.status(400).json({ message: "El ID del grupo ingresado no existe" });
        }
+       const acudienteData = await Acudiente.findOne({
+        where: {
+          id_acu: acudienteFK,
+        }
+       });
+
+       if(!acudienteData){
+           return res.status(400).json({ message: "El ID del acudiente ingresado no existe" });
+       }
        
 
   const data = await Estudiante.create({
@@ -140,7 +169,8 @@ const createEstudiante = async (req, res) => {
          rol, 
          password: passwordHash,
          tok: generarCodigo(),
-         grupoFK: grupoFK
+         grupoFK: grupoFK,
+         acudienteFK: acudienteFK 
         });
 
     /*send({
@@ -192,12 +222,37 @@ const deleteEstudiante = async (req, res) => {
        HanledError(res,   {error:"ERROR AL ELIMINAR REGISTRO"}  , 400);
       }
     };
-    
 
-const validateEmail = async (req, res) => {
- const { token } = req.params;
-    
+
+
+
+  const getAllInformation = async (req, res) => {
+    try{
+      const  datos_activos = await Estudiante.findAll({
+        where: { activo: true },
+        include : [
+          {
+            model: Grupo, 
+            include: {model: Grado, attributes: { exclude: ['activo', 'createdAt', 'updatedAt'] }}, // Excluir campos del modelo Grado
+            attributes: { exclude: ['activo', 'createdAt', 'updatedAt'] } // Excluir campos del modelo Grupo
+          }, 
+          {
+            model: Acudiente, 
+            attributes: { exclude: ['activo', 'createdAt', 'updatedAt'] } // Excluir campos del modelo Acudiente
+          }
+        ],
+        attributes: { exclude: ['activo', 'createdAt', 'updatedAt', "password"] } // Excluir campos del modelo Estudiante
+      })
+      res.status(200).json({data: datos_activos})
     }
+
+   catch(e){
+    HanledError(res, "Error al recuperar los registros", 500)
+    console.log(e)
+   }
+}
+
+
 
 module.exports = {
    getEstudiantes,
@@ -205,5 +260,6 @@ module.exports = {
    updateEstudiante,
    createEstudiante,
    deleteEstudiante,
-   validateEmail
+   getAllInformation
+   
 };

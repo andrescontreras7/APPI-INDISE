@@ -49,6 +49,7 @@ const Estudiante = sequelize.define(
         
       
       },
+    
     },
     estudcorreo: {
       type: DataTypes.STRING,
@@ -80,16 +81,10 @@ const Estudiante = sequelize.define(
     rol: {
       type: DataTypes.INTEGER,
       allowNull: false,
-      validate: {
-        notNull: {
-          msg: "El campo 'rol' es obligatorio.",
-        },
-        isInt: {
-          msg: "El campo 'rol' debe ser un número entero.",
-        },
+      defaultValue: 3,
       },
      
-    },
+  
     grupoFK: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -111,6 +106,18 @@ const Estudiante = sequelize.define(
         },
         notEmpty: {
           msg: "El campo 'password' no puede estar vacío.",
+        },
+      },
+    },
+    acudienteFK:{
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notNull: {
+          msg: "El campo 'acudienteFK' es obligatorio.",
+        },
+        isInt: {
+          msg: "El campo 'acudienteFK' debe ser un número entero.",
         },
       },
     },
@@ -145,9 +152,8 @@ const Estudiante = sequelize.define(
   }
 );
 
-Estudiante.belongsToMany(Acudiente, { through: "EstudianteAcudiente" });
-Acudiente.belongsToMany(Estudiante, { through: "EstudianteAcudiente" });
 
+Estudiante.belongsTo(Acudiente, { foreignKey: 'acudienteFK' });
 Estudiante.belongsTo(Rol, { foreignKey: "rol" });
 Estudiante.belongsTo(Grupo, { foreignKey: "grupoFK" });
 

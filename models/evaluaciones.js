@@ -1,5 +1,6 @@
 const { sequelize } = require("../config/mysql")
 const { DataTypes } = require("sequelize");
+const Grupo = require("./grupo");
 const Evaluaciones = sequelize.define(
   "evaluaciones",
   {
@@ -30,6 +31,37 @@ const Evaluaciones = sequelize.define(
         }
       }
     },
+    url: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'la url no puede estar vacia no puede estar vacío'
+        }
+      }
+      },
+      id_grupo: {
+        type: DataTypes.INTEGER,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            args: true,
+            msg: 'El id del grupo no puede estar vacío'
+          }
+        }
+      },
+      fec_entre:{
+        type: DataTypes.DATE,
+        allowNull: false,
+        validate: {
+          notEmpty: {
+            args: true,
+            msg: 'la fecha de entrega no puede estar vacia no puede estar vacío'
+          }
+        }
+
+      },
    
     activo: {
       type: DataTypes.BOOLEAN,
@@ -49,6 +81,10 @@ const Evaluaciones = sequelize.define(
     timestamps: true,
   }
 );
+
+
+Evaluaciones.belongsTo(Grupo, { foreignKey: 'id_grupo' });
+
 sequelize.sync() // Sincronizar el modelo con la base de datos
   .then(() => {
     console.log('Modelo sincronizado correctamente.');
