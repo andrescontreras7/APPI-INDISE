@@ -11,7 +11,7 @@ asignaturasRoutes.get("/appi/asignaturas",authMidd ,  getAsignaturas )
 
 
 //crear una asignatura
-asignaturasRoutes.post("/appi/asignaturas/create",  authMidd,  checkRol(),  createAsignaturas)
+asignaturasRoutes.post("/appi/asignaturas/create",  authMidd,  createAsignaturas)
 
 
 //eliminar asignatura

@@ -1,4 +1,4 @@
-const  {HanledError} = require('../utils/CapError.js')
+const  {handleError} = require('../utils/CapError.js')
 const Asistencias_estudiantes  = require("../models/asistencias_estudiantes.js")
 const {Asignatura} = require("../models/areas.js")
 const  Grado = require("../models/grado.js")
@@ -19,6 +19,10 @@ const getAsistencias_E = async (req, res) => {
                     model: Estudiante,
                     attributes: ['estudnombre', 'estudapellido']
                 },
+                {
+                    model: Asignatura,
+                    attributes: ['asignombre']
+                }
                
             ],
             attributes: {
@@ -27,7 +31,7 @@ const getAsistencias_E = async (req, res) => {
         });
         res.status(200).json({ data: datos });
     } catch (error) {
-        HanledError(res, "error al obtener asistencias");
+        handleError(res, "error al obtener asistencias");
         console.log(error);
     }
 };
@@ -42,10 +46,7 @@ const getFilterGrupo = async (req,res) =>{
         },
         attributes: ['cod_asi','fec_asi','det_asi','estudidfk'],
         include : [
-           {
-            model: Grado,
-            attributes: ['nombre_grado']
-           },
+          
            {
             model:Estudiante,
             attributes: ['estudnombre','estudapellido']

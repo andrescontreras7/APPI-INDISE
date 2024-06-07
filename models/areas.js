@@ -1,6 +1,8 @@
 const { sequelize } = require("../config/mysql");
 const { DataTypes, Sequelize } = require("sequelize");
 const Estudiante = require("../models/estudiante.js");
+const AsignaturaDocente = require("./asignatura-docente.js");
+
 
 const Area = sequelize.define(
   "areas",
@@ -41,6 +43,7 @@ const Asignatura = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
+      UUID: true,
       validate: {
         notNull: {
           msg: "El código de asignatura es obligatorio",
@@ -68,6 +71,10 @@ const Asignatura = sequelize.define(
           msg: "La descripción de asignatura es obligatoria",
         },
       },
+    },
+    url: {
+      type: DataTypes.STRING,
+      allowNull: false,
     },
     areaFK: {
       type: DataTypes.INTEGER,
@@ -98,15 +105,21 @@ const Asignatura = sequelize.define(
     timestamps: true,
   }
 );
+Asignatura.hasMany(AsignaturaDocente, { foreignKey: "asignaturaAsigcod", sourceKey: "asigcod"});
+AsignaturaDocente.belongsTo(Asignatura, { foreignKey: "asignaturaAsigcod", sourceKey: "asigcod"});
+
+
 
 Asignatura.belongsTo(Area, {
   foreignKey: "areaFK",
 });
 
+
 Area.hasMany(Asignatura, {
   foreignKey: "areaFK",
   sourceKey: "cod_area",
 });
+
 
 module.exports = {
   Area,

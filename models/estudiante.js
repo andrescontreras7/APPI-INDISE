@@ -1,7 +1,7 @@
 const { sequelize } = require("../config/mysql");
 const { DataTypes } = require("sequelize");
-const Acudiente = require("../models/acudiente.js");
 const Grupo = require("../models/grupo.js");
+const Acudiente = require("../models/acudiente.js");
 const Rol = require("./rol");
 
 const Estudiante = sequelize.define(
@@ -155,7 +155,7 @@ const Estudiante = sequelize.define(
 
 Estudiante.belongsTo(Acudiente, { foreignKey: 'acudienteFK' });
 Estudiante.belongsTo(Rol, { foreignKey: "rol" });
-Estudiante.belongsTo(Grupo, { foreignKey: "grupoFK" });
+Estudiante.belongsTo(Grupo, { foreignKey: "grupoFK",  sourceKey:"grupcod" });
 
 
 module.exports = Estudiante;

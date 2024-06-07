@@ -29,7 +29,7 @@
     "nodemon": "^3.1.0",
     "pdfkit": "^0.14.0",
     "pdfkit-table": "^0.1.99",
-    "sequelize": "^6.37.0",
+    "sequelize": "^6.37.3",
     "sqlite3": "^5.1.7"
   }
 }

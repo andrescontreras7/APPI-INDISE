@@ -1,6 +1,7 @@
+const generarCodigo = require("../helpers/generarCodigo.js");
 const {Asignatura , Area} = require("../models/areas");
 const { areaModels } = require("../models/index.js");
-const  {HanledError} = require('../utils/CapError.js')
+const  {handleError} = require('../utils/CapError.js')
 const _ = require('lodash');
 const { Op } = require('sequelize');
 
@@ -17,7 +18,7 @@ const getAsignaturas = async (req,res) => {
     res.json({data});
     console.log(data);
   } catch(e) {
-    HanledError(res, "Error al obtener las asignaturas");
+    handleError(res, "Error al obtener las asignaturas");
     console.log(e);
   }
 }
@@ -41,7 +42,7 @@ const getAsignatura = async (req,res) => {
           res.status(404).send('REGISTRO NO ENCONTRADO');
         }
     }catch(e){
-        HanledError(res , "Eror al obtener las asignaturas mi pana " )
+      handleError(res , "Eror al obtener las asignaturas mi pana " )
         console.log(e)
 
     }
@@ -81,28 +82,29 @@ const updateAsignaturas = async (req,res) => {
  */
 const createAsignaturas  = async (req,res) => {
     try {
-      const { asigcod, asignombre, asigdescripcion, areaFK } = req.body;
+      const { asignombre, asigdescripcion, areaFK, url } = req.body;
   
-      if (_.isNil(asigcod)  || _.isEmpty(asignombre) || _.isEmpty(asigdescripcion) || _.isNil(areaFK)) {
-        return res.status(400).json({ message: "TODOS_LOS_CAMPOS_SON_REQUERIDOS" });
-      }     
+     
   
       const asignaturaData = await Asignatura.findOne({
        where: {
-          [Op.or]: [{ asigcod }, { asignombre }]
+        asignombre,
         }
       });
     
       if (!asignaturaData) {
-        const Info = await Asignatura.create({asigcod, asignombre, asigdescripcion, areaFK  })
-        return res.status(200).json({ message:"REGISTRO CREADO EXITOSAMENTE" });
+        const Info = await Asignatura.create({ asignombre, asigdescripcion, areaFK, url, asigcod:generarCodigo() });
+        return res.status(200).json({ 
+          sucess: true,
+          message:"REGISTRO CREADO EXITOSAMENTE" });
       
       } else {
 
-        return res.status(500).json({ message: "ERROR CAMPOS YA EXISTEN" });
+        return res.status(407).json({ 
+          sucess: false,message: "ERROR CAMPOS YA EXISTEN" });
       }
     } catch (e) {
-      HanledError(res, "ERROR AL CREAR ASIGNATURA   " );
+      handleError(res, "ERROR AL CREAR ASIGNATURA   " );
       console.log(e)
   
     }

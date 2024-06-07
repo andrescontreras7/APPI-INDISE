@@ -5,7 +5,7 @@ const {getAsistencias_E, getFilterGrupo} = require("../controller/asistencias_ES
 const asistenciasRouter = express.Router();
 
 
-asistenciasRouter.get("/appi/asistenciaEstudiantes",authMidd, checkRol(), getAsistencias_E   )
+asistenciasRouter.get("/appi/asistenciaEstudiantes",    authMidd, checkRol(), getAsistencias_E   )
 asistenciasRouter.post("/appi/asistenciaEstudiantes/fillter-grupo/:grupcod", getFilterGrupo   )
 
 

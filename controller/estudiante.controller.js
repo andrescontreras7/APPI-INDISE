@@ -137,7 +137,11 @@ const createEstudiante = async (req, res) => {
 
        if (user) {
            console.log("Error, el ID del estudiante o el correo ya existe");
-           return res.status(407).json({ message: "Error, el ID del estudiante o el correo ya existe" });
+           return res.status(409).json(
+            {  sucess: false, 
+               message: "Error, el ID del estudiante o el correo ya existe"
+               }
+          );
        }
        const grupoEstudianteData = await Grupo.findOne({
         where: {
@@ -146,7 +150,7 @@ const createEstudiante = async (req, res) => {
         }
        })
        if(!grupoEstudianteData){
-           return res.status(400).json({ message: "El ID del grupo ingresado no existe" });
+           return res.status(404).json( {  sucess: false,  message: "El ID del grupo ingresado no existe" });
        }
        const acudienteData = await Acudiente.findOne({
         where: {
@@ -155,7 +159,7 @@ const createEstudiante = async (req, res) => {
        });
 
        if(!acudienteData){
-           return res.status(400).json({ message: "El ID del acudiente ingresado no existe" });
+           return res.status(404).json( {  sucess: false, message: "El ID del acudiente ingresado no existe" });
        }
        
 
@@ -182,12 +186,12 @@ const createEstudiante = async (req, res) => {
     
        const token = await tokenSign({ estudid: estudid, rol: rol });
 
-       return res.status(200).json({ message: "Estudiante creado exitosamente" });
+       return res.status(200).json( {  sucess: true,  message: "Estudiante creado exitosamente" });
        
 
    } catch (e) {
        console.error('Error al crear estudiante:', e);
-       return res.status(500).json({ error: 'Error al crear estudiante' });
+       return res.status(500).json( {  sucess: false,  error: 'Error al crear estudiante' });
    }
    
 };

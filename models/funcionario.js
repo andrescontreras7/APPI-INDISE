@@ -1,6 +1,7 @@
 const { sequelize } = require("../config/mysql");
 const { DataTypes } = require("sequelize");
 const Rol = require("./rol");
+const AsignaturaDocente = require("./asignatura-docente");
 
 // Definición del modelo Funcionario
 const Funcionario = sequelize.define(
@@ -108,5 +109,8 @@ const Funcionario = sequelize.define(
 
 // Relación entre Funcionario y Rol
 Funcionario.belongsTo(Rol, { foreignKey: 'rolFK' });
+
+Funcionario.hasMany(AsignaturaDocente, { foreignKey: 'funcionarioFuncid', sourceKey: 'funcid'});
+AsignaturaDocente.belongsTo(Funcionario, { foreignKey: 'funcionarioFuncid' });
 
 module.exports = Funcionario;

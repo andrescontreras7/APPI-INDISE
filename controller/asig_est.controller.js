@@ -31,10 +31,10 @@ const getAllInformation = async (req, res) => {
 
 const getInformationById = async (req, res) => {
   try {
-    const { id } = req.params; // Obtenemos el id de la asignatura desde los parámetros de la ruta
+    const { id, } = req.params; // Obtenemos el id de la asignatura desde los parámetros de la ruta
 
-    const asig_est = await Asignatura.findOne({ // Cambiamos findAll por findOne para obtener una sola asignatura
-      where: { asigcod: id, activo: true }, // Agregamos la condición para buscar por id
+    const asig_est = await Asignatura.findOne({
+      where: { asigcod: id, activo: true }, 
   
       include: [{
         model: Estudiantes,
