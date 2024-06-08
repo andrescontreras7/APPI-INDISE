@@ -55,7 +55,7 @@ const Asistencias_estudiantes = sequelize.define(
       type: DataTypes.DATE,
       allowNull: false
     },
-    asigFK:{
+    asigFk:{
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {

@@ -1,5 +1,6 @@
 const generarCodigo = require("../helpers/generarCodigo.js");
 const {Asignatura , Area} = require("../models/areas");
+const AsignaturaDocente = require("../models/asignatura-docente.js");
 const { areaModels } = require("../models/index.js");
 const  {handleError} = require('../utils/CapError.js')
 const _ = require('lodash');
@@ -124,6 +125,15 @@ const createAsignaturas  = async (req,res) => {
 const deleteAsignaturas = async (req, res) => {
   try {
     const { asigcod } = req.params;
+    const verfify = await AsignaturaDocente.findOne({
+      where: {
+        asignaturaAsigcod: asigcod,
+      },
+    });
+    if (verfify) {
+      return res.status(403).json({ 
+        success: false, message: "La asignatura está asignada a un docente" });
+    } 
     
     const deletedA = await Asignatura.update(
       { activo: false }, // Marcamos el registro como inactivo
@@ -136,13 +146,13 @@ const deleteAsignaturas = async (req, res) => {
     );
 
     if (deletedA) {
-      res.status(200).json({mensagge:"Registro eliminado exitosamente "})
+      res.status(200).json({ message: "Registro eliminado exitosamente" });
     } else {
       res.status(404).send("Registro no encontrado o ya eliminado");
     }
   } catch (error) {
     console.log(error);
-    res.status(500).json({mensagge:"Error al eliminar el registro"});
+    res.status(500).json({ message: "Error al eliminar el registro" });
   }
 };
 

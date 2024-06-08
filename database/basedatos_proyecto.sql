@@ -114,28 +114,31 @@ CREATE TABLE `asignaturadocentes` (
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   `grupoFK` int(11) NOT NULL,
-  PRIMARY KEY (`id`),
+  `tematicasFk` int(11) DEFAULT NULL,
+  PRIMARY KEY (`id`,`asignaturaAsigcod`,`funcionarioFuncid`),
   KEY `funcionarioFuncid` (`funcionarioFuncid`),
   KEY `grupo` (`grupoFK`),
   KEY `asignaturaDocentes_funcionarioFuncid_asignaturaAsigcod_unique` (`asignaturaAsigcod`,`funcionarioFuncid`) USING BTREE,
+  KEY `tematicasFk` (`tematicasFk`),
   CONSTRAINT `asignaturadocentes_ibfk_1` FOREIGN KEY (`asignaturaAsigcod`) REFERENCES `asignaturas` (`asigcod`),
   CONSTRAINT `asignaturadocentes_ibfk_2` FOREIGN KEY (`funcionarioFuncid`) REFERENCES `funcionario` (`funcid`),
-  CONSTRAINT `asignaturadocentes_ibfk_3` FOREIGN KEY (`grupoFK`) REFERENCES `grupos` (`grupcod`)
-) ENGINE=InnoDB AUTO_INCREMENT=2322239 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+  CONSTRAINT `asignaturadocentes_ibfk_3` FOREIGN KEY (`grupoFK`) REFERENCES `grupos` (`grupcod`),
+  CONSTRAINT `asignaturadocentes_ibfk_4` FOREIGN KEY (`tematicasFk`) REFERENCES `tematicas` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2322241 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `asignaturadocentes` */
 
-insert  into `asignaturadocentes`(`id`,`asignaturaAsigcod`,`funcionarioFuncid`,`activo`,`createdAt`,`updatedAt`,`grupoFK`) values 
-(232,2323,123456789,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',76868),
-(2322228,2323,123456789,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',9898),
-(2322230,2323,123456789,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',12324223),
-(2322231,312312,11295345,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',9898),
-(2322232,123213,11295345,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',53536),
-(2322233,321312,11295345,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',76868),
-(2322234,321312,11295345,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',53536),
-(2322236,321312,123456789,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',9898),
-(2322237,22358,11295345,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',12324223),
-(2322238,22358,11295345,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',76868);
+insert  into `asignaturadocentes`(`id`,`asignaturaAsigcod`,`funcionarioFuncid`,`activo`,`createdAt`,`updatedAt`,`grupoFK`,`tematicasFk`) values 
+(232,2323,123456789,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',76868,72803),
+(2322228,2323,123456789,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',9898,72803),
+(2322230,2323,123456789,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',12324223,NULL),
+(2322231,312312,11295345,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',9898,NULL),
+(2322232,123213,11295345,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',53536,NULL),
+(2322233,321312,11295345,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',76868,NULL),
+(2322234,321312,11295345,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',53536,NULL),
+(2322236,321312,123456789,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',9898,NULL),
+(2322237,22358,11295345,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',12324223,NULL),
+(2322238,22358,11295345,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',76868,NULL);
 
 /*Table structure for table `asignaturas` */
 
@@ -158,13 +161,14 @@ CREATE TABLE `asignaturas` (
 /*Data for the table `asignaturas` */
 
 insert  into `asignaturas`(`asigcod`,`asignombre`,`asigdescripcion`,`areaFK`,`activo`,`createdAt`,`updatedAt`,`url`) values 
-(323,'biologia','tecnica',321321,1,'2024-03-20','2024-03-20',''),
-(2323,'ingles','tecnica',67,1,'2024-04-11','2024-04-11','https://res.cloudinary.com/ddjks1j0d/image/upload/v1716845505/imagenes-proyecto/Xs_GrinVuNFnIEmfGSX6FMJiRRuTS0NFyII2oQvYuUFtJIO1h4miZ0mFY1urJNh0SZZ1_ozmkdt.png'),
-(22358,'filosofia','tecnica',56,1,'2024-06-07','2024-06-07','https://res.cloudinary.com/ddjks1j0d/image/upload/v1717726327/imagenes-proyecto/kzpgtuobylcwuzk5jukp.jpg'),
-(123213,'geometria','tecnica',43,1,'2024-04-11','2024-04-11',''),
-(312312,'naturales','tecnica',321321,1,'2024-04-11','2024-04-11',NULL),
-(321312,'desarrollo politico','tecnica',23,1,'2024-04-11','2024-04-11',NULL),
-(423324,'manualidades','letiva',4231213,1,'2024-04-11','2024-04-11',NULL),
+(323,'biologia','tecnica',321321,0,'2024-03-20','2024-06-08',''),
+(2323,'ingles','tecnica',67,0,'2024-04-11','2024-06-08','https://res.cloudinary.com/ddjks1j0d/image/upload/v1716845505/imagenes-proyecto/Xs_GrinVuNFnIEmfGSX6FMJiRRuTS0NFyII2oQvYuUFtJIO1h4miZ0mFY1urJNh0SZZ1_ozmkdt.png'),
+(22358,'filosofia','tecnica',56,1,'2024-06-07','2024-06-08','https://res.cloudinary.com/ddjks1j0d/image/upload/v1717726327/imagenes-proyecto/kzpgtuobylcwuzk5jukp.jpg'),
+(75366,'josep','sssssss',43,0,'2024-06-08','2024-06-08','https://res.cloudinary.com/ddjks1j0d/image/upload/v1717826267/imagenes-proyecto/ap8bqqksj0kkh3e5kihl.jpg'),
+(123213,'geometria','tecnica',43,1,'2024-04-11','2024-06-08',''),
+(312312,'naturales','tecnica',321321,1,'2024-04-11','2024-06-08',NULL),
+(321312,'desarrollo politico','tecnica',23,1,'2024-04-11','2024-06-08',NULL),
+(423324,'manualidades','letiva',4231213,1,'2024-04-11','2024-06-08',NULL),
 (423431,'analisis literario','lectiva',432333,1,'2024-04-11','2024-04-11',NULL),
 (2147483647,'castellano','tecnica',67,1,'2024-04-11',NULL,NULL);
 
@@ -189,11 +193,12 @@ CREATE TABLE `asignaturasestudiantes` (
 
 insert  into `asignaturasestudiantes`(`estudianteId`,`asignaturaId`,`activo`,`createdAt`,`updatedAt`) values 
 (22,2323,1,'2024-05-27 17:14:20','2024-05-27 17:14:25'),
+(111,22358,1,'0000-00-00 00:00:00','0000-00-00 00:00:00'),
 (133,2323,1,'2024-05-27 17:14:17','2024-05-27 17:14:18'),
 (133,123213,1,'2024-05-27 17:14:28','2024-05-27 17:14:29'),
 (222,2323,1,'2024-05-27 17:14:22','2024-05-27 17:14:23'),
 (222,123213,1,'0000-00-00 00:00:00','0000-00-00 00:00:00'),
-(5345345,2323,0,'2024-05-21 07:34:59','2024-05-22 07:35:04');
+(223457,22358,1,'0000-00-00 00:00:00','0000-00-00 00:00:00');
 
 /*Table structure for table `asistencia_funcionario` */
 
@@ -227,27 +232,25 @@ CREATE TABLE `asistencias_estudiantes` (
   `activo` tinyint(4) DEFAULT NULL,
   `createdAt` datetime DEFAULT NULL,
   `updatedAt` datetime DEFAULT NULL,
-  `asigFK` int(11) DEFAULT NULL,
   `claseFK` int(11) DEFAULT NULL,
+  `asigFk` int(11) DEFAULT NULL,
   PRIMARY KEY (`cod_asi`),
   KEY `estudidfk` (`estudidfk`),
   KEY `grupoFK` (`grupoFK`),
-  KEY `asignatura` (`asigFK`),
   KEY `claseFK` (`claseFK`),
+  KEY `asigFk` (`asigFk`),
   CONSTRAINT `asistencias_estudiantes_ibfk_1` FOREIGN KEY (`estudidfk`) REFERENCES `estudiantes` (`estudid`),
   CONSTRAINT `asistencias_estudiantes_ibfk_2` FOREIGN KEY (`grupoFK`) REFERENCES `grupos` (`grupcod`),
-  CONSTRAINT `asistencias_estudiantes_ibfk_3` FOREIGN KEY (`asigFK`) REFERENCES `asignaturas` (`asigcod`),
-  CONSTRAINT `asistencias_estudiantes_ibfk_4` FOREIGN KEY (`claseFK`) REFERENCES `clases` (`claseId`)
+  CONSTRAINT `asistencias_estudiantes_ibfk_4` FOREIGN KEY (`claseFK`) REFERENCES `clases` (`claseId`),
+  CONSTRAINT `asistencias_estudiantes_ibfk_5` FOREIGN KEY (`asigFk`) REFERENCES `asignaturadocentes` (`asignaturaAsigcod`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `asistencias_estudiantes` */
 
-insert  into `asistencias_estudiantes`(`cod_asi`,`fec_asi`,`det_asi`,`estudidfk`,`grupoFK`,`activo`,`createdAt`,`updatedAt`,`asigFK`,`claseFK`) values 
-(0,'2024-06-03',1,133,76868,1,'2024-06-03 20:20:06','2024-06-03 20:20:07',2323,2),
-(323,'2024-06-06',1,21232343,76868,1,NULL,NULL,2323,2),
-(2322,'2024-06-03',1,222,76868,1,'2024-06-03 18:30:03','2024-06-03 18:30:06',2323,2),
-(2323,'2024-06-04',1,7654321,9898,1,'2024-06-04 15:05:18','2024-06-04 15:05:20',321312,2),
-(4545,'2024-06-03',1,133,76868,1,'2024-06-03 19:31:41','2024-06-03 19:31:44',2323,2);
+insert  into `asistencias_estudiantes`(`cod_asi`,`fec_asi`,`det_asi`,`estudidfk`,`grupoFK`,`activo`,`createdAt`,`updatedAt`,`claseFK`,`asigFk`) values 
+(323,'2024-06-08',1,5345345,76868,1,'2024-06-08 12:54:33',NULL,2,22358),
+(3232,'2024-06-08',1,222,53536,1,'2024-06-08 12:05:54','2024-06-08 12:05:56',2,2323),
+(13494,'2022-01-01',1,133,53536,1,'2024-06-08 16:54:07','2024-06-08 16:54:07',2,2323);
 
 /*Table structure for table `calificaciones` */
 
@@ -281,15 +284,15 @@ CREATE TABLE `clases` (
   `asignaturaDocenteId` int(11) DEFAULT NULL,
   PRIMARY KEY (`claseId`),
   KEY `grupoId` (`grupoId`),
-  KEY `clases_ibfk_2` (`asignaturaDocenteId`),
+  KEY `asignaturaAsigcod` (`asignaturaDocenteId`),
   CONSTRAINT `clases_ibfk_1` FOREIGN KEY (`grupoId`) REFERENCES `grupos` (`grupcod`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  CONSTRAINT `clases_ibfk_2` FOREIGN KEY (`asignaturaDocenteId`) REFERENCES `asignaturadocentes` (`id`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `clases_ibfk_2` FOREIGN KEY (`asignaturaDocenteId`) REFERENCES `asignaturadocentes` (`asignaturaAsigcod`)
 ) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `clases` */
 
 insert  into `clases`(`claseId`,`fecha`,`grupoId`,`activo`,`createdAt`,`updatedAt`,`asignaturaDocenteId`) values 
-(2,'2024-06-03 18:30:20',9898,1,'2024-06-03 18:30:26','2024-06-03 18:30:28',2322228);
+(2,'2024-06-03 18:30:20',9898,1,'2024-06-03 18:30:26','2024-06-03 18:30:28',NULL);
 
 /*Table structure for table `envio` */
 
@@ -367,6 +370,7 @@ CREATE TABLE `estudiantes` (
 
 insert  into `estudiantes`(`estudid`,`estudnombre`,`estudapellido`,`estuddireccion`,`estudcorreo`,`estudtelefono`,`rol`,`password`,`tok`,`createdAt`,`updatedAt`,`activo`,`grupoFK`,`acudienteFK`) values 
 (22,'luna','bohada','las malvinas','mr.coco1420@gmail.comss',38899897,3,'$2a$04$5WDt9cuMp8cUeEcUEpC.aO3dI83OaoDZJdypgpl4mGWEQLx4ZnXkC',28382,'2024-03-21','2024-04-11',1,76868,NULL),
+(111,'yeseniaaaaa','bolivar','rolota','asdsads@dasdsa.com',2147483647,3,'$2a$04$GcqnwD1.St4cuopZimYQzeXUgPbZju5b20JGKuvoibWDoPe7aFv.S',41099,'2024-06-08','2024-06-08',0,9898,1),
 (133,'joao','cancelo','el country','joa@gmail.com',32323232,3,'$2a$04$tWdvp48ZlXihdgloGL5jdu4FZcWLM9ORXAnlTaGwclEkwC5InsAY6',NULL,'0000-00-00','0000-00-00',1,76868,NULL),
 (222,'mario','castro','girasoles','mario0@gmail.com',32323232,3,'$2a$04$ZMePt0Tg3tHs/Mv/tm.KWeO7qCq.Bi3gR4o2bxlaBmKnqq7N11pVa',50777,'2024-03-31','2024-04-11',1,76868,NULL),
 (223457,'gregorio','castro','Manzana','grregorio@sapo.com',3232323,3,'$2a$04$lZaw32kydw5Qk1dxkxHTmuWwPJGTlFoidgTZYgZRK.eMrCh.Bn0sm',26703,'2024-06-04','2024-06-04',1,2323,321343),
@@ -397,15 +401,15 @@ CREATE TABLE `evaluaciones` (
   `fec_entre` datetime NOT NULL,
   `url` varchar(255) NOT NULL,
   `id_grupoFK` int(11) DEFAULT NULL,
+  `tematicaFK` int(11) DEFAULT NULL,
   PRIMARY KEY (`codigo`),
   KEY `id_grupoFK` (`id_grupoFK`),
-  CONSTRAINT `evaluaciones_ibfk_1` FOREIGN KEY (`id_grupoFK`) REFERENCES `grupos` (`grupcod`)
+  KEY `tematicaFK` (`tematicaFK`),
+  CONSTRAINT `evaluaciones_ibfk_1` FOREIGN KEY (`id_grupoFK`) REFERENCES `grupos` (`grupcod`),
+  CONSTRAINT `evaluaciones_ibfk_2` FOREIGN KEY (`tematicaFK`) REFERENCES `tematicas` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `evaluaciones` */
-
-insert  into `evaluaciones`(`codigo`,`nombre_tipo_evaluacion`,`descripcion`,`activo`,`createdAt`,`updatedAt`,`fec_entre`,`url`,`id_grupoFK`) values 
-('f0399789-6d2e-4ad2-bac3-c220fc18c058','Nombre de la evaluación','Descripción de la evaluación',0,'2024-03-27 19:30:28','2024-03-27 19:37:04','0000-00-00 00:00:00','',NULL);
 
 /*Table structure for table `excusa` */
 
@@ -802,6 +806,45 @@ CREATE TABLE `sequelizemeta` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 /*Data for the table `sequelizemeta` */
+
+/*Table structure for table `tematicagrupos` */
+
+DROP TABLE IF EXISTS `tematicagrupos`;
+
+CREATE TABLE `tematicagrupos` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `tematicaId` int(11) NOT NULL,
+  `grupoId` int(11) NOT NULL,
+  `activo` tinyint(1) NOT NULL DEFAULT 1,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `tematicaId` (`tematicaId`),
+  KEY `grupoId` (`grupoId`),
+  CONSTRAINT `tematicagrupos_ibfk_1` FOREIGN KEY (`tematicaId`) REFERENCES `tematicas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `tematicagrupos_ibfk_2` FOREIGN KEY (`grupoId`) REFERENCES `grupos` (`grupcod`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `tematicagrupos` */
+
+/*Table structure for table `tematicas` */
+
+DROP TABLE IF EXISTS `tematicas`;
+
+CREATE TABLE `tematicas` (
+  `id` int(11) NOT NULL,
+  `titulo` varchar(255) NOT NULL,
+  `descripcion` varchar(255) DEFAULT NULL,
+  `activo` tinyint(1) NOT NULL DEFAULT 1,
+  `createdAt` datetime NOT NULL,
+  `updatedAt` datetime NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `tematicas` */
+
+insert  into `tematicas`(`id`,`titulo`,`descripcion`,`activo`,`createdAt`,`updatedAt`) values 
+(72803,'crear registros','ssssssssssssss',1,'2024-06-07 22:55:55','2024-06-07 22:55:55');
 
 /*Table structure for table `tipo evaluacion` */
 

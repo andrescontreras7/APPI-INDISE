@@ -4,6 +4,7 @@ const Estudiante = require("../models/estudiante.js");
 const Funcionario = require("../models/funcionario.js");
 const Grado = require("../models/grado");
 const AsignaturaDocente = require("./asignatura-docente.js");
+const TematicaGrupo = require("./tematicas_grupo.js");
 
 
 const Grupo = sequelize.define(
@@ -41,5 +42,9 @@ Grupo.hasMany(AsignaturaDocente, {
 });
 AsignaturaDocente.belongsTo(Grupo, { foreignKey: "grupoFk" });
 
+
+Grupo.hasMany(TematicaGrupo, { foreignKey: "grupoId" });
+
+TematicaGrupo.belongsTo(Grupo, { foreignKey: "grupoId" });
 
 module.exports = Grupo;

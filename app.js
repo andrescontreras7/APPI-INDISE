@@ -21,6 +21,8 @@ const AsigDocRouter = require("./routes/asigDoc.routes.js");
 const enviosRouter = require("./routes/envios_tareas.routes.js");
 const asigEstudiantes = require("./routes/asigna_est.routes.js");
 const clasesRouter = require("./routes/clases.routes.js");
+const Temas = require("./routes/tematicas.routes.js");
+const TemasGrup = require("./routes/temasGrup.routes.js");
 
 require("dotenv").config()
 
@@ -58,6 +60,8 @@ app.use(AsigDocRouter)
 app.use(enviosRouter)
 app.use(asigEstudiantes)
 app.use(clasesRouter)
+app.use(Temas)
+app.use(TemasGrup)
 
 app.listen(puerto,  ()=> {
     console.log(`servidor escucahdo en el puerto ${puerto}`)
