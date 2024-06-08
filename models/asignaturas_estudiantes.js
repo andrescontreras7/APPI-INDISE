@@ -1,26 +1,21 @@
 const { sequelize } = require("../config/mysql")
 const { DataTypes } = require("sequelize");
 
-const Estudiante = require('./estudiante');
-const {Asignatura} = require('./areas');
-
 
 const AsignaturaEstudiante = sequelize.define(
     "AsignaturasEstudiante",
   {
     estudianteId: {
       type: DataTypes.INTEGER,
-      references: {
-        model: Estudiante,
-        key: 'id',
-      },
+      primaryKey: true,
+      allowNull: false,
+    
     },
     asignaturaId: {
       type: DataTypes.INTEGER,
-      references: {
-        model: Asignatura,
-        key: 'id',
-      },
+      primaryKey: true,
+      allowNull: false,
+      
     },
 
   activo: {
@@ -39,16 +34,12 @@ const AsignaturaEstudiante = sequelize.define(
 },
   {
     timestamps: true,
+    tableName: "AsignaturaEstudiante",
   }
 
 );
 
-Estudiante.belongsToMany(Asignatura, {
-    through: AsignaturaEstudiante,
-    foreignKey: 'estudianteId'
-  });
 
-  Asignatura.belongsToMany(Estudiante, {
-    through: AsignaturaEstudiante,
-    foreignKey: 'asignaturaId'
-  });
+
+
+  module.exports = AsignaturaEstudiante;

@@ -1,10 +1,10 @@
 const { handleError } = require("../utils/CapError.js");
-const Grupo = require("../models/grupo.js");
+
 const _ = require("lodash");
-const { where } = require("sequelize");
+const {Grupo, Estudiante} = require("../models/index.js");
 const Grado = require("../models/grado.js");
 const AsignaturaDocente = require("../models/asignatura-docente.js");
-const Estudiante = require("../models/estudiante.js");
+const generarCodigo = require("../helpers/generarCodigo.js");
 
 const getGrupo = async (req, res) => {
   try {
@@ -25,47 +25,6 @@ const getGrupo = async (req, res) => {
  * @param {} req
  * @param {*} res
  */
-const createGrupo = async (req, res) => {
-  try {
-    const { grupcod, grado_FK, grupsalon, directorFK } = req.body;
-
-    const grupoData = await Grupo.findOne({
-      where: {
-        grupcod: grupcod,
-      },
-    });
-
-    if (!grupoData) {
-      // Verificar si el grado_FK existe
-      const gradoData = await Grado.findOne({
-        where: {
-          gradocod: grado_FK,
-        },
-      });
-
-      if (!gradoData) {
-        return res
-          .status(400)
-          .json({ message: "El ID del grado ingresado no existe" });
-      }
-
-      const data = await Grupo.create({
-        grupcod: grupcod,
-        grupperiodo: grupperiodo,
-        grupgrado: grupgrado,
-        grupsalon: grupsalon,
-        directorFK: directorFK,
-        grado_FK: grado_FK,
-      });
-
-      res.status(200).json({ data: "creado exitosamente " });
-    } else {
-      res.status(400).json({ data: " IS ALREADY EXIST " });
-    }
-  } catch (error) {
-    HanledError(res, "error:", error, 404);
-  }
-};
 
 const updateGrupo = async (req, res) => {
   try {
@@ -91,6 +50,50 @@ const updateGrupo = async (req, res) => {
   } catch (error) {
     console.error("Error al actualizar el registro:", error);
     return res.status(500).json({ error: "Error al actualizar el registro" });
+  }
+};
+const createGrupo = async (req, res) => {
+  try {
+    const { grado_FK, grupsalon, directorFK, grupperiodo, grupgrado } = req.body;
+
+    // Verificar si el grupo ya existe
+    const grupoData = await Grupo.findOne({
+      where: {
+        grado_FK: grado_FK,
+        directorFK: directorFK
+      },
+    });
+
+    if (!grupoData) {
+      // Verificar si el grado_FK existe
+      const gradoData = await Grado.findOne({
+        where: {
+          grado_codigo: grado_FK,
+        },
+      });
+
+      if (!gradoData) {
+        return res
+          .status(404)
+          .json({ success: false, message: "El ID del grado ingresado no existe" });
+      }
+
+      const data = await Grupo.create({
+        grupcod: generarCodigo(),
+        grupperiodo: grupperiodo,
+        grupgrado: grupgrado,
+        grupsalon: grupsalon,
+        directorFK: directorFK,
+        grado_FK: grado_FK,
+      });
+
+      res.status(201).json({ success: true, message: "Grupo creado exitosamente", data: data });
+    } else {
+      res.status(409).json({ success: false, message: "El grupo ya existe" });
+    }
+  } catch (error) {
+    console.error("Error al crear el grupo:", error);
+    handleError(res, "Error interno del servidor", 500);
   }
 };
 

@@ -4,7 +4,7 @@ const Estudiantes = require("../models/estudiante");
 
 const getAllInformation = async (req, res) => {
   try {
-    const asig_est = await Asignatura.findAll({
+    const asig_est = await AsignaturaEstudiante.findAll({
       where: { activo: true },
   
       include: [{
@@ -61,9 +61,49 @@ const getInformationById = async (req, res) => {
     });
   }
 };
+
+const getAsignaturasByEstudianteId = async (req, res) => {
+  try {
+    const { estudid } = req.params; 
+
+    const asignaturas = await AsignaturaEstudiante.findAll({
+      where: { estudianteId: estudid },
+      include: [{
+        model: Asignatura,
+        attributes: { exclude: ["activo", "createdAt", "updatedAt"] },
+      }]
+    });
+
+    if (!asignaturas) { 
+      return res.status(404).json({
+        success: false,
+        error: "Asignaturas no encontradas para el estudiante especificado",
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      data: asignaturas,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      error: "Error del servidor",
+    });
+  }
+};
+
+
+
+
+
+
 module.exports = {
     getAllInformation,
-    getInformationById
+    getInformationById,
+    getAsignaturasByEstudianteId
+    
 }
 
 

@@ -2,6 +2,7 @@ const { sequelize } = require("../config/mysql");
 const { DataTypes, Sequelize } = require("sequelize");
 const Estudiante = require("../models/estudiante.js");
 const AsignaturaDocente = require("./asignatura-docente.js");
+const AsignaturaEstudiante = require("./asignaturas_estudiantes.js");
 
 
 const Area = sequelize.define(
@@ -108,6 +109,11 @@ const Asignatura = sequelize.define(
 Asignatura.hasMany(AsignaturaDocente, { foreignKey: "asignaturaAsigcod", sourceKey: "asigcod"});
 AsignaturaDocente.belongsTo(Asignatura, { foreignKey: "asignaturaAsigcod", sourceKey: "asigcod"});
 
+
+AsignaturaEstudiante.belongsTo(Asignatura, {
+  foreignKey: "asignaturaId",
+});
+Asignatura.hasMany(AsignaturaEstudiante, { foreignKey: "asignaturaId" });
 
 
 Asignatura.belongsTo(Area, {

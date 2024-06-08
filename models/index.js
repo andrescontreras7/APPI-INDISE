@@ -1,9 +1,10 @@
-const models = {
-    areaModels: require('../models/areas'),
-    estudModels:require("../models/estudiante"),
-   
+const Grupo = require('./grupo');
+const Estudiante = require('./estudiante');
 
-  
-  };
-  
-  module.exports = models;
+Grupo.hasMany(Estudiante, { foreignKey: 'grupoFK' });
+Estudiante.belongsTo(Grupo, { foreignKey: 'grupoFK' });
+
+module.exports = {
+  Grupo,
+  Estudiante
+};
