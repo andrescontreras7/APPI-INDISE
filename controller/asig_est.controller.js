@@ -33,12 +33,14 @@ const getInformationById = async (req, res) => {
   try {
     const { id, } = req.params; // Obtenemos el id de la asignatura desde los parámetros de la ruta
 
-    const asig_est = await Asignatura.findOne({
-      where: { asigcod: id, activo: true }, 
+    const asig_est = await AsignaturaEstudiante.findOne({
+      where: { asignaturaId: id, activo: true }, 
   
       include: [{
         model: Estudiantes,
         attributes: { exclude: [ "createdAt", "updatedAt", "password"] },
+
+        model: Asignatura,
       }]
     });
 
@@ -71,6 +73,7 @@ const getAsignaturasByEstudianteId = async (req, res) => {
       include: [{
         model: Asignatura,
         attributes: { exclude: ["activo", "createdAt", "updatedAt"] },
+        
       }]
     });
 
