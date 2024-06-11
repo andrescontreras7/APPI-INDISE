@@ -1,4 +1,4 @@
-const { sequelize } = require("../config/mysql")
+const { sequelize } = require("../config/mysql");
 const { DataTypes } = require("sequelize");
 const Grupo = require("./grupo");
 const Evaluaciones = sequelize.define(
@@ -8,18 +8,18 @@ const Evaluaciones = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
       primaryKey: true,
-      defaultValue: DataTypes.UUIDV1
+      defaultValue: DataTypes.UUIDV1,
     },
-   
+
     nombre_tipo_evaluacion: {
       type: DataTypes.STRING,
       allowNull: false,
       validate: {
         notEmpty: {
           args: true,
-          msg: 'El nombre de la evaluacion no puede estar vacío'
-        }
-      }
+          msg: "El nombre de la evaluacion no puede estar vacío",
+        },
+      },
     },
     descripcion: {
       type: DataTypes.STRING,
@@ -27,9 +27,9 @@ const Evaluaciones = sequelize.define(
       validate: {
         notEmpty: {
           args: true,
-          msg: 'la descripcion no puede esatr vacia no puede estar vacío'
-        }
-      }
+          msg: "la descripcion no puede esatr vacia no puede estar vacío",
+        },
+      },
     },
     url: {
       type: DataTypes.STRING,
@@ -37,61 +37,50 @@ const Evaluaciones = sequelize.define(
       validate: {
         notEmpty: {
           args: true,
-          msg: 'la url no puede estar vacia no puede estar vacío'
-        }
-      }
+          msg: "la url no puede estar vacia no puede estar vacío",
+        },
       },
-      id_grupo: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            args: true,
-            msg: 'El id del grupo no puede estar vacío'
-          }
-        }
+    },
+    id_grupo: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: "El id del grupo no puede estar vacío",
+        },
       },
-      fec_entre:{
-        type: DataTypes.DATE,
-        allowNull: false,
-        validate: {
-          notEmpty: {
-            args: true,
-            msg: 'la fecha de entrega no puede estar vacia no puede estar vacío'
-          }
-        }
+    },
+    fec_entre: {
+      type: DataTypes.DATE,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: "la fecha de entrega no puede estar vacia no puede estar vacío",
+        },
+      },
+    },
 
-      },
-   
     activo: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
-      defaultValue: true
+      defaultValue: true,
     },
     createdAt: {
       type: DataTypes.DATE,
-      allowNull: false
+      allowNull: false,
     },
     updatedAt: {
       type: DataTypes.DATE,
-      allowNull: false
-    }
+      allowNull: false,
+    },
   },
   {
     timestamps: true,
   }
 );
 
+Evaluaciones.belongsTo(Grupo, { foreignKey: "id_grupo" });
 
-Evaluaciones.belongsTo(Grupo, { foreignKey: 'id_grupo' });
-
-sequelize.sync() // Sincronizar el modelo con la base de datos
-  .then(() => {
-    console.log('Modelo sincronizado correctamente.');
-  })
-  .catch(error => {
-    console.error('Error al sincronizar el modelo:', error);
-  });
-  
-
-module.exports = Evaluaciones
+module.exports = Evaluaciones;

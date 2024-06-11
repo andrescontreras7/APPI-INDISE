@@ -23,6 +23,42 @@ const getAcudientes = async (req, res) => {
   }
 }
 
+const getAcudienteDetail = async (req, res) => {
+  try {
+    const { id_acu } = req.params;
+
+    if (!id_acu) {
+      return res.status(400).json({
+        success: false,
+        message: "El ID del acudiente no puede estar vacío",
+      });
+    }
+
+    const acudienteData = await Acudientes.findOne({
+      where: {
+        id_acu: id_acu,
+        activo: true
+      }
+    });
+
+    if (acudienteData) {
+      return res.status(200).json({
+        success: true,
+        message: "Datos recuperados exitosamente",
+        data: acudienteData
+      });
+    } else {
+      return res.status(404).json({
+        success: false,
+        message: "Acudiente no encontrado",
+      });
+    }
+  } catch (error) {
+    console.error(error);
+    handleError(res, "Ocurrió un error al recuperar los datos", 500);
+  }
+};
+
 const createAcudientes = async (req, res) => {
   try {
     const { id_acu, nom_acu, ape_acu, corr_acu, tel_acu } = req.body;
@@ -90,9 +126,55 @@ const deletedAcudientes = async (req, res) => {
     handleError(res, "Error al eliminar registro", 500);
   }
 };
+const updateAcudiente = async (req, res) => {
+  try {
+    const { id_acu } = req.params;
+    const { nom_acu, ape_acu, corr_acu, tel_acu } = req.body;
+
+    if (!id_acu) {
+      return res.status(400).json({
+        success: false,
+        message: "El ID del acudiente no puede estar vacío",
+      });
+    }
+
+    const acudienteData = await Acudientes.findOne({
+      where: {
+        id_acu: id_acu,
+        activo: true
+      }
+    });
+
+    if (!acudienteData) {
+      return res.status(404).json({
+        success: false,
+        message: "Acudiente no encontrado",
+      });
+    }
+
+    await Acudientes.update(
+      { nom_acu, ape_acu, corr_acu, tel_acu },
+      {
+        where: {
+          id_acu: id_acu
+        }
+      }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: "Registro actualizado exitosamente",
+    });
+  } catch (error) {
+    console.error(error);
+    handleError(res, "Error al actualizar registro", 500);
+  }
+};
 
 module.exports = {
   getAcudientes,
   createAcudientes,
-  deletedAcudientes
-}
+  deletedAcudientes,
+  getAcudienteDetail,
+  updateAcudiente
+};

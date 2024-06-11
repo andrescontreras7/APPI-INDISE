@@ -1,8 +1,9 @@
 const { Op } = require("sequelize");
 const Excusas = require("../models/excusas.js");
-const { HanledError } = require("../utils/CapError.js");
+const { handleError } = require("../utils/CapError.js");
 const _ = require("lodash");
 const Estudiante = require("../models/estudiante.js");
+const Asistencias_estudiantes = require("../models/asistencias_estudiantes.js");
 
 const getExcusas = async (req, res) => {
   try {
@@ -51,7 +52,19 @@ const getExcusaDetail = async (req, res) => {
 
 const createExcusas = async (req, res) => {
   try {
-    const {  fec_reg_exc, mot_reg_exc, id_persona } = req.body;
+    const {  fec_reg_exc, mot_reg_exc, id_persona, asistenciaFK,url_archivo } = req.body;
+
+
+    const AsisDta = await Asistencias_estudiantes.findOne({
+      where: {
+        cod_asi:  asistenciaFK ,
+      },
+    });
+    if (!AsisDta) {
+      return res
+       .status(409)
+       .json({ message: "El id de la asistencia no existe. " });
+    }
 
     const excusaData = await Estudiante.findOne({
       where: {
@@ -68,11 +81,13 @@ const createExcusas = async (req, res) => {
       fec_reg_exc,
       mot_reg_exc,
       id_persona,
+      asistenciaFK,
+      url_archivo
     
     });
     res.status(200).json({ message: "Registro creado exitosamente" });
   } catch (error) {
-    HanledError(res, "Error al crear el registro", 400);
+    handleError(res, "Error al crear el registro", 400);
     console.log(error);
   }
 };

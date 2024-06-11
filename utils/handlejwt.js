@@ -11,7 +11,7 @@ const sing = await jwt.sign(
     },
     JWT_SECRET,
     {
-        expiresIn :"1h"
+        expiresIn :"2h"
     }
 
     
@@ -27,13 +27,14 @@ return sing
  * debe de pasar el token de sesion 
  */
 const verifyToken = async (tokenJWT) =>{
-
     try {
         return jwt.verify(tokenJWT, JWT_SECRET)
     } catch (error) {
+        if (error instanceof jwt.TokenExpiredError) {
+            return 'Token expirado';  // devuelve un mensaje específico para el error de token expirado
+        }
         return null 
     }
-
 }
 
 module.exports = {tokenSign , verifyToken}

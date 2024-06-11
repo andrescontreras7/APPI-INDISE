@@ -1,126 +1,147 @@
 const generarCodigo = require("../helpers/generarCodigo.js");
-const {Asignatura , Area} = require("../models/areas");
+
+const { Area, Asignatura } = require("../models/areas");
 const AsignaturaDocente = require("../models/asignatura-docente.js");
-const { areaModels } = require("../models/index.js");
-const  {handleError} = require('../utils/CapError.js')
-const _ = require('lodash');
-const { Op } = require('sequelize');
+
+const { handleError } = require("../utils/CapError.js");
+const _ = require("lodash");
 
 /**
- * obtener usuarios de la base de datos 
- * @param {*} req 
- * @param {*} res 
+ * obtener usuarios de la base de datos
+ * @param {*} req
+ * @param {*} res
  */
-const getAsignaturas = async (req,res) => {
-  try{
+const getAsignaturas = async (req, res) => {
+  try {
     const data = await Asignatura.findAll({
-      include: [Area] // Incluye la tabla Area en la consulta
+      where: { activo: true },
+      include: [Area],
     });
-    res.json({data});
-    console.log(data);
-  } catch(e) {
-    handleError(res, "Error al obtener las asignaturas");
+    res.json({
+      success: true,
+      message: "Asignaturas obtenidas con éxito",
+      data,
+    });
+  } catch (e) {
     console.log(e);
+    res
+      .status(500)
+      .json({ success: false, message: "Error al obtener las asignaturas" });
   }
-}
-
- 
-
-
+};
 
 /**
- *obtener un detalle 
- * @param {*} req 
- * @param {*} res 
+ *obtener un detalle
+ * @param {*} req
+ * @param {*} res
  */
-const getAsignatura = async (req,res) => {
-    try{
-        const { asigcod } = req.params;
-        const data = await Asignatura.findByPk(asigcod);
-        if (data) {
-          res.status(200).json(data);
-        } else {
-          res.status(404).send('REGISTRO NO ENCONTRADO');
-        }
-    }catch(e){
-      handleError(res , "Eror al obtener las asignaturas mi pana " )
-        console.log(e)
-
+const getAsignatura = async (req, res) => {
+  try {
+    const { asigcod } = req.params;
+    const data = await Asignatura.findOne({
+      where: {
+        asigcod: asigcod,
+        activo: true,
+      },
+    });
+    if (data) {
+      res
+        .status(200)
+        .json({
+          success: true,
+          message: "Asignatura obtenida con éxito",
+          data,
+        });
+    } else {
+      res
+        .status(404)
+        .json({ success: false, message: "Asignatura no encontrada" });
     }
-}
-
-
+  } catch (e) {
+    console.log(e);
+    res
+      .status(500)
+      .json({ success: false, message: "Error al obtener la asignatura" });
+  }
+};
 
 /**
  * actulizar un registro pa
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
-const updateAsignaturas = async (req,res) => {
-    try {
-        const body = req.body;
-        const {asigcod } =req.params // Obtén el ID y los nuevos datos del cuerpo de la solicitud
-    
-        const area = await Asignatura.findByPk(asigcod);
-         // Busca el registro por su ID
-        console.log(body)
-        if (area) {
-          await area.update(body); // Actualiza los datos del registro con los nuevos datos
-          res.status(200).json({mensagge:"REGISTRO ACTUALIZADO CORRECTAMENTE"  }); // Envia la respuesta con el registro actualizado
-        } else {
-          res.status(404).send('REGISTRO NO ENCONTRADO'); // Envía una respuesta de error si el registro no existe
-        }
-      } catch (error) {
-        res.status(500).send('ERROR AL ACTUALIZAR'); // Envía una respuesta de error si ocurre alguna excepción
-      }
-    }
+const updateAsignaturas = async (req, res) => {
+  try {
+    const body = req.body;
+    const { asigcod } = req.params; // Obtén el ID y los nuevos datos del cuerpo de la solicitud
 
+    const area = await Asignatura.findByPk(asigcod);
+    // Busca el registro por su ID
+    console.log(body);
+    if (area) {
+      await area.update(body); // Actualiza los datos del registro con los nuevos datos
+      res
+        .status(200)
+        .json({ success: true, message: "Registro actualizado exitosamente" }); // Envia la respuesta con el registro actualizado
+    } else {
+      res
+        .status(404)
+        .json({ success: false, message: "Registro no encontrado" }); // Envía una respuesta de error si el registro no existe
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .json({ success: false, message: "Error al actualizar el registro" }); // Envía una respuesta de error si ocurre alguna excepción
+  }
+};
 
 /**
  * insertar un registro perro hpt
- * @param {*} req 
- * @param {*} res 
+ * @param {*} req
+ * @param {*} res
  */
-const createAsignaturas  = async (req,res) => {
-    try {
-      const { asignombre, asigdescripcion, areaFK, url } = req.body;
-  
-     
-  
-      const asignaturaData = await Asignatura.findOne({
-       where: {
-        asignombre,
-        }
-      });
-    
-      if (!asignaturaData) {
-        const Info = await Asignatura.create({ asignombre, asigdescripcion, areaFK, url, asigcod:generarCodigo() });
-        return res.status(200).json({ 
-          sucess: true,
-          message:"REGISTRO CREADO EXITOSAMENTE" });
-      
-      } else {
+const createAsignaturas = async (req, res) => {
+  try {
+    const { asignombre, asigdescripcion, areaFK, url } = req.body;
 
-        return res.status(407).json({ 
-          sucess: false,message: "ERROR CAMPOS YA EXISTEN" });
+    /*const Area = await Area.findOne({
+      where: {
+        cod_area: areaFK
       }
-    } catch (e) {
-      handleError(res, "ERROR AL CREAR ASIGNATURA   " );
-      console.log(e)
-  
-    }
-  };
- 
+    })
+    if (!Area) {
+      return res.status(400).json({ 
+        success: false,
+        message: "El area especificado no existe"
+      });
+    } */
 
-
-
+    const Info = await Asignatura.create({
+      asignombre,
+      asigdescripcion,
+      areaFK,
+      url,
+      asigcod: generarCodigo(),
+    });
+    return res.status(200).json({
+      success: true,
+      message: "Asignatura creada exitosamente",
+      data: Info,
+    });
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({
+      success: false,
+      message: "Error al crear la asignatura",
+    });
+  }
+};
 
 /**
- * eliminar un registro 
- * @param {*} req 
- * @param {*} res 
+ * eliminar un registro
+ * @param {*} req
+ * @param {*} res
  */
-
 
 const deleteAsignaturas = async (req, res) => {
   try {
@@ -131,17 +152,19 @@ const deleteAsignaturas = async (req, res) => {
       },
     });
     if (verfify) {
-      return res.status(403).json({ 
-        success: false, message: "La asignatura está asignada a un docente" });
-    } 
-    
+      return res.status(403).json({
+        success: false,
+        message: "La asignatura está asignada a un docente",
+      });
+    }
+
     const deletedA = await Asignatura.update(
       { activo: false }, // Marcamos el registro como inactivo
       {
         where: {
           asigcod: asigcod,
-          activo: true // Aseguramos que el registro esté activo antes de marcarlo como inactivo
-        }
+          activo: true, // Aseguramos que el registro esté activo antes de marcarlo como inactivo
+        },
       }
     );
 
@@ -156,9 +179,10 @@ const deleteAsignaturas = async (req, res) => {
   }
 };
 
-
-
-
-
-
-module.exports ={ getAsignaturas,  getAsignatura,  updateAsignaturas, createAsignaturas,  deleteAsignaturas }
+module.exports = {
+  getAsignaturas,
+  getAsignatura,
+  updateAsignaturas,
+  createAsignaturas,
+  deleteAsignaturas,
+};

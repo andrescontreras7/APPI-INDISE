@@ -1,7 +1,8 @@
 const { matchedData } = require("express-validator");
 const {Area} = require( "../models/areas.js")
-const  {HanledError} = require('../utils/CapError.js')
+const  {handleError} = require('../utils/CapError.js')
 const _ = require('lodash');
+const generarCodigo = require("../helpers/generarCodigo.js");
 
 
 
@@ -16,15 +17,16 @@ const _ = require('lodash');
  * @param {*} res 
  */
 const getAreas = async (req, res) => {
-    try {
-      const data = await Area.findAll();
-      res.send({ data });
-    } catch (error) {
-      HanledError(res , "Ocurrió un error al recuperar los registros" )
-     console.log(error)
-    }
-  };
-
+  try {
+    const datos_activos = await Area.findAll({
+      where: { activo: true },
+    });
+    res.status(200).json({success:true, data: datos_activos });
+  } catch (e) {
+    handleError(res, "Error al recuperar los registros", 500);
+    console.log(e);
+  }
+};
 
 
 
@@ -53,7 +55,7 @@ const getArea = async (req,res) => {
 
   }catch(e){
     console.log(e)
-    HanledError(res, "error en esa verga" )
+    handleError(res, "error en esa verga" )
   }
 
 }
@@ -78,7 +80,7 @@ const updateArea = async (req, res) => {
     const area = await Area.findByPk(cod_area); // Busca el registro por su ID
     if (area) {
       await area.update(body); // Actualiza los datos del registro con los nuevos datos
-      res.send({ area }); // Envía la respuesta con el registro actualizado
+     res.status(200).json({ success: true, message: "Área actualizada exitosamente", data: area }); // Envía una respuesta de éxito si la actualización fue exitosa
     } else {
       res.status(404).send('Registro no encontrado'); // Envía una respuesta de error si el registro no existe
     }
@@ -99,24 +101,18 @@ const updateArea = async (req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
+
 const createArea = async (req, res) => {
   try {
-    const {cod_area , are_nombre} = req.body
-      if(_.isNil(cod_area) || _.isEmpty(are_nombre) ) {
-        res.status(400).json({mensage:"hay campos vacios "})
-      
-      }                  
-    const datos = await Area.create({cod_area , are_nombre} )
-     //asignamos a la variable datos los valores obtenidos de la base de datos 
-    res.status(200).json({mensage:"creado exitosamente "})//se valida si se ingresan con exito
+    const {  are_nombre } = req.body;
+
+    const areaData = await Area.create({ cod_area:generarCodigo(), are_nombre });
+    res.status(201).json({success:true,  message: "Área creada exitosamente", data: areaData });
   } catch (error) {
-   console.log(error)
-   HanledError(res , "error al crear nueva area") // se llama la funcion de captura de errores
-   }
+    console.error("Error al crear el área:", error);
+    handleError(res, "Error al crear nueva área", 500);
+  }
 };
-
-
-
 
 
 
@@ -125,36 +121,37 @@ const createArea = async (req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-const deleteArea =  async (req,res) => {
+const deleteArea = async (req, res) => {
+  try {
+    const { cod_area } = req.params;
+    const areas = await Area.findOne({ where: { cod_area: cod_area } });
 
-  try{
+    if (!areas) {
+      return res
+        .status(404)
+        .json({ success:false, message: "No se encontró la area con el código proporcionado" });
+    }
+
    
-    const { cod_area } = req.params  //se usa de la destructuracion para extraer el valor de cod_Area del req
-    console.log(cod_area)
-    const deletedRows = await Area.destroy({   //se ejecuta la funcion de elimnar al modelo 
-      where: {
-        cod_area: cod_area  //se pasa el id
+
+    await Area.update(
+      { activo: false },
+      {
+        where: {
+          cod_area,
+          activo: true,
+        },
       }
-    })
-    if(deletedRows ==1) { // validar que se haya eliminado
-      res.send("registro elimado exitosamnete")
-      res.send({deletedRows})
-      res.status(200)
-    }
-    else{
-      res.send("error al borrar arae")
-    }
-   
-  
+    );
 
-
-  }catch(e){
-    console.log(e)
-    HanledError(res, "error en esa verga" )
+    res.status(200).json({ success:true, message: "Registro eliminado exitosamente" });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ success:true,message: "Ocurrió un error al eliminar el registro" });
   }
+};
 
 
-}
 
 
 

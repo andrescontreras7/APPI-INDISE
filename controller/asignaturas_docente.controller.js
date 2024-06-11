@@ -3,6 +3,7 @@ const { Asignatura } = require("../models/areas");
 const Funcionario = require("../models/funcionario");
 const Grupo = require("../models/grupo");
 const Grado = require("../models/grado");
+const { Estudiante } = require("../models");
 
 const getAsignaturaDocente = async (req, res) => {
   try {
@@ -167,7 +168,7 @@ const getGroup = async (req, res) => {
 
       where: {
         funcionarioFuncid: id,
-        asignaturaAsigcod:asigcod
+        asignaturaAsigcod:asigcod,
       },
       include: [
         {
@@ -198,7 +199,56 @@ const getGroup = async (req, res) => {
     });
   }
 };
+const getGroupAll = async (req, res) => {
+  try {
+    const { id, asigcod, grupoFK } = req.params;
 
+    // Buscar el docente
+    const docente = await Funcionario.findByPk(id);
+    if (!docente) {
+      return res.status(404).json({
+        success: false,
+        error: "Docente no encontrado",
+      });
+    }
+
+    const asignaturaDocente = await AsignaturaDocente.findAll({
+   
+
+      where: {
+        funcionarioFuncid: id,
+        asignaturaAsigcod:asigcod,
+        grupoFK
+      },
+      include: [
+        {
+          model: Asignatura,
+          attributes: ["asigcod", "asignombre", "asigdescripcion", "url"],
+          exclude: ["createdAt", "updatedAt", "activo "],
+        },
+        {
+          model: Grupo,
+          attributes: { exclude: ["activo", "createdAt", "updatedAt"] },
+          include: {
+            model: Estudiante,
+            attributes: { exclude: ["createdAt", "updatedAt"] },
+          }
+        },
+      ],
+    });
+
+    return res.status(200).json({
+      success: true,
+      data: asignaturaDocente,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      success: false,
+      error: "Error del servidor",
+    });
+  }
+};
 
 module.exports = {
   createAsignaturaDocente,
@@ -206,5 +256,6 @@ module.exports = {
   getDocenteAsignatura,
   getGroup,
   getAll,
+  getGroupAll
   
 };

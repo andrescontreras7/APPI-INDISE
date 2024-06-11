@@ -18,6 +18,11 @@ const Area = sequelize.define(
         },
       },
     },
+    activo: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    },
     are_nombre: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -29,6 +34,7 @@ const Area = sequelize.define(
           args: [3, 50],
           msg: "El nombre de área debe tener entre 3 y 50 caracteres",
         },
+        
       },
     },
   },
@@ -94,12 +100,12 @@ const Asignatura = sequelize.define(
     createdAt: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+      
     },
     updatedAt: {
       type: DataTypes.DATE,
       allowNull: false,
-      defaultValue: Sequelize.literal("CURRENT_TIMESTAMP"),
+     
     },
   },
   {

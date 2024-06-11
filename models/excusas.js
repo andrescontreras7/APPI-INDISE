@@ -1,6 +1,7 @@
 const { sequelize } = require("../config/mysql");
 const { DataTypes } = require("sequelize");
 const Estudiante = require("./estudiante");
+const Asistencias_estudiantes = require("./asistencias_estudiantes");
 
 const Excusa = sequelize.define(
   "excusa",
@@ -22,6 +23,14 @@ const Excusa = sequelize.define(
     id_persona: {
       type: DataTypes.INTEGER,
     },
+    asistenciaFK: {
+      type: DataTypes.INTEGER,
+    },
+  
+  url_archivo: {
+    type: DataTypes.INTEGER,
+  },
+    
       activo: {
         type: DataTypes.BOOLEAN,
         allowNull: false,
@@ -43,5 +52,7 @@ const Excusa = sequelize.define(
 );
 
 Excusa.belongsTo(Estudiante, { foreignKey: 'id_persona' });
+Excusa.belongsTo(Asistencias_estudiantes, { foreignKey: 'asistenciaFK' });
+
 
 module.exports = Excusa;

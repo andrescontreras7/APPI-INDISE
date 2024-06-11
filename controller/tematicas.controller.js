@@ -3,6 +3,9 @@ const Tematica = require("../models/tematicas.js");
 
 const AsignaturaDocente = require("../models/asignatura-docente.js");
 const generarCodigo = require("../helpers/generarCodigo.js");
+const { Asignatura } = require("../models/areas.js");
+const Funcionario = require("../models/funcionario.js");
+const Grupo = require("../models/grupo.js");
 
 const getTematica = async (req, res) => {
   try {
@@ -95,32 +98,40 @@ const deleteTematica = async (req, res) => {
 
 const getTematicaByAsignatura = async (req, res) => {
   try {
-    const { asigcod, docId, grupCod } = req.body;
+    const { asigcod, docId, grupCod } = req.params;
 
-    // Verificar si existe la asignaturaDocente
-    const asignaturaDocente = await AsignaturaDocente.findOne({
-      where: { asignaturaAsigcod: asigcod, funcionarioFuncid: docId, grupoFK: grupCod },
-    });
+    // Validar que los IDs existen en sus respectivos modelos
+    const asignatura = await Asignatura.findOne({ where: { asigcod } });
+    if (!asignatura) {
+      return res.status(404).json({ success: false, message: "Asignatura no encontrada" });
+    }
 
-    if (!asignaturaDocente) {
-      return res.status(400).json({ message: "La combinación de asignatura, docente y grupo no existe" });
+    const docente = await Funcionario.findOne({ where: { funcid: docId } });
+    if (!docente) {
+      return res.status(404).json({ success: false, message: "Docente no encontrado" });
+    }
+
+    const grupo = await Grupo.findOne({ where: { grupcod: grupCod } });
+    if (!grupo) {
+      return res.status(404).json({ success: false, message: "Grupo no encontrado" });
     }
 
     // Obtener las temáticas asociadas a la asignaturaDocente
-    const tematicas = await Tematica.findAll({
-      where: { asignatura_cod: asignaturaDocente.id },
+    const tematicas = await AsignaturaDocente.findAll({
+      where: { asignaturaAsigcod: asigcod, funcionarioFuncid: docId, grupoFk: grupCod },
+      include: {
+        model: Tematica,
+        where: { activo: true },
+      },
     });
 
-    res.status(200).json(tematicas);
+    res.status(200).json({ success: true, data: tematicas });
   } catch (error) {
     console.error("Error al obtener temáticas por asignatura:", error);
-    handleError(res, "Error al obtener temáticas por asignatura", 404);
+    res.status(500).json({ success: false, message: "Error al obtener temáticas por asignatura" });
   }
 };
 
-module.exports = {
-  getTematicaByAsignatura,
-};
 
 
 
@@ -129,4 +140,5 @@ module.exports = {
   createTematica,
   updateTematica,
   deleteTematica,
+  getTematicaByAsignatura,
 };

@@ -58,13 +58,6 @@ const Observador = sequelize.define(
 
 Observador.belongsTo(Funcionario, { foreignKey: 'funcidfv' }),
 Observador.belongsTo(Estudiante, { foreignKey: 'estudid' }),
-sequelize.sync() // Sincronizar el modelo con la base de datos
-  .then(() => {
-    console.log('Modelo sincronizado correctamente obsevador.');
-  })
-  .catch(error => {
-    console.error('Error al sincronizar el modelo:', error);
-  });
-  
+
 
 module.exports = Observador

@@ -1,7 +1,5 @@
 const { DataTypes, UUIDV1, UUID } = require("sequelize");
 const { sequelize } = require("../config/mysql");
-const AsignaturaDocente = require("./asignatura-docente");
-const TematicaGrupo = require("./tematicas_grupo");
 
 const Tematicas = sequelize.define(
   "tematicas",
@@ -20,10 +18,7 @@ const Tematicas = sequelize.define(
       type: DataTypes.STRING,
       allowNull: true
     },
-    asignatura_cod: {
-      type: DataTypes.INTEGER,
-      allowNull: false
-    },
+
     activo: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
@@ -46,8 +41,7 @@ const Tematicas = sequelize.define(
 );
 
 
-Tematicas.belongsTo(AsignaturaDocente, { foreignKey: "asignatura_cod", sourceKey: "id"});
-Tematicas.hasMany(TematicaGrupo, { foreignKey: "tematicaId" });
 
-TematicaGrupo.belongsTo(Tematicas, { foreignKey: "tematicaId" });
+
+
 module.exports = Tematicas;

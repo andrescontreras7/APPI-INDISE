@@ -18,6 +18,6 @@ asignaturasRoutes.post("/appi/asignaturas/create",  authMidd,  createAsignaturas
 asignaturasRoutes.delete("/appi/asignaturas/:asigcod",authMidd ,deleteAsignaturas)
 
 //actualizar una asignatura
-asignaturasRoutes.put("/:asigcod",authMidd, updateAsignaturas)
+asignaturasRoutes.put("/appi/asignaturas/update/:asigcod",authMidd, updateAsignaturas)
 
 module.exports = asignaturasRoutes

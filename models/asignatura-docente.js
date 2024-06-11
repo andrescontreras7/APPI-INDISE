@@ -1,5 +1,6 @@
 const { sequelize } = require("../config/mysql");
 const { DataTypes } = require("sequelize");
+const Tematicas = require("./tematicas");
 
 const AsignaturaDocente = sequelize.define(
   "asignaturaDocente",
@@ -17,6 +18,12 @@ const AsignaturaDocente = sequelize.define(
     
     },
     grupoFK:{
+      type: DataTypes.INTEGER,
+      allowNull: false,
+   
+    },
+    
+    tematicasFK:{
       type: DataTypes.INTEGER,
       allowNull: false,
    
@@ -40,13 +47,8 @@ const AsignaturaDocente = sequelize.define(
   }
 );
 
-sequelize.sync() // Sincronizar el modelo con la base de datos
-.then(() => {
-  console.log('Modelo sincronizado correctamente sapo.');
-})
-.catch(error => {
-  console.error('Error al sincronizar el modelo:', error);
-});
 
-  
+
+AsignaturaDocente.belongsTo(Tematicas, { foreignKey: "tematicasFK" })
+
 module.exports = AsignaturaDocente;

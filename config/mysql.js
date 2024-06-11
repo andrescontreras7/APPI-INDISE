@@ -21,9 +21,9 @@ const sequelize = new Sequelize(
 const dbconnectMysqlpa = async() => {
     try{
         await sequelize.authenticate();
-        console.log("conexion correcta crak eeres el mejr")
+        console.log("conexion correcta ")
     }catch(e){
-        console.log("error de concexion pa ,", e)
+        console.log("error de concexion ,", e)
     }
 
 

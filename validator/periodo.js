@@ -15,4 +15,4 @@ exports.validatePeriodo = [
     (req, res, next) => {
       validateResult(req, res, next);
   }
-];
+]; 
