@@ -2,7 +2,7 @@ const { sequelize } = require("../config/mysql")
 const { DataTypes } = require("sequelize");
 const Estudiantes = require("./estudiante");
 const Evaluaciones = require("./evaluaciones");
-const Envio = sequelize.define('Envio',
+const Envio = sequelize.define('Envios',
 {
     uid: {
       type: DataTypes.STRING,
@@ -33,6 +33,26 @@ const Envio = sequelize.define('Envio',
     },
     url: {
       type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'el campo url no puede estar vacío'
+        }
+      }
+    },
+    descripcion: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'el campo url no puede estar vacío'
+        }
+      }
+    },
+    nota: {
+      type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: {
