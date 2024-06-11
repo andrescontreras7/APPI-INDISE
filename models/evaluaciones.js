@@ -1,6 +1,9 @@
 const { sequelize } = require("../config/mysql");
 const { DataTypes } = require("sequelize");
 const Grupo = require("./grupo");
+const { Asignatura } = require("./areas");
+const Funcionario = require("./funcionario");
+const Tipo_evaluacion = require("./tipoEva");
 const Evaluaciones = sequelize.define(
   "evaluaciones",
   {
@@ -11,16 +14,7 @@ const Evaluaciones = sequelize.define(
       defaultValue: DataTypes.UUIDV1,
     },
 
-    nombre_tipo_evaluacion: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          args: true,
-          msg: "El nombre de la evaluacion no puede estar vacío",
-        },
-      },
-    },
+   
     descripcion: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -41,7 +35,8 @@ const Evaluaciones = sequelize.define(
         },
       },
     },
-    id_grupo: {
+  
+    id_grupoFk: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
@@ -51,6 +46,27 @@ const Evaluaciones = sequelize.define(
         },
       },
     },
+    id_asignatura: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: "El id de la asignatura no puede estar vacío",
+        },
+      },
+    },
+    id_funcionario: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: "El id del funcionario no puede estar vacío",
+        },
+      },
+      },
+
     fec_entre: {
       type: DataTypes.DATE,
       allowNull: false,
@@ -75,12 +91,19 @@ const Evaluaciones = sequelize.define(
       type: DataTypes.DATE,
       allowNull: false,
     },
-  },
+    tipo_eva:{
+      type: DataTypes.INTEGER,
+      allowNull: false,
+    },
+    },
   {
     timestamps: true,
   }
 );
 
-Evaluaciones.belongsTo(Grupo, { foreignKey: "id_grupo" });
+Evaluaciones.belongsTo(Grupo, { foreignKey: "id_grupoFK" });
+Evaluaciones.belongsTo(Asignatura, { foreignKey: "id_asignatura" });
+Evaluaciones.belongsTo(Funcionario, { foreignKey: "id_funcionario" });
+Evaluaciones.belongsTo(Tipo_evaluacion, { foreignKey: "tipo_eva" })
 
 module.exports = Evaluaciones;

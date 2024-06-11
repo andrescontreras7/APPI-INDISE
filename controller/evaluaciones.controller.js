@@ -1,96 +1,202 @@
-const  {handleError} = require('../utils/CapError.js')
-const Evaluaciones = require('../models/evaluaciones.js');
-const _ = require('lodash');
-const Grupo = require('../models/grupo.js');
+const Evaluaciones = require("../models/evaluaciones");
+const Grupo = require("../models/grupo");
+const { Asignatura } = require("../models/areas");
+const Funcionario = require("../models/funcionario");
+const Tipo_evaluacion = require("../models/tipoEva");
+const { where, Model } = require("sequelize");
 
 
+const createEvaluacion = async (req, res) => {
+  const {
+    descripcion,
+    url,
+    id_grupoFk,
+    id_asignatura,
+    id_funcionario,
+    fec_entre,
+    tipo_eva,
+  } = req.body;
 
+  const grupo = await Grupo.findByPk(id_grupoFk);
+  if (!grupo) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Grupo no encontrado" });
+  }
 
+  const asignatura = await Asignatura.findByPk(id_asignatura);
+  if (!asignatura) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Asignatura no encontrada" });
+  }
 
+  const funcionario = await Funcionario.findByPk(id_funcionario);
+  if (!funcionario) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Funcionario no encontrado" });
+  }
 
+  const tipoEva = await Tipo_evaluacion.findByPk(tipo_eva);
+  if (!tipoEva) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Tipo de evaluación no encontrado" });
+  }
 
+  try {
+    const evaluacion = await Evaluaciones.create({
+      descripcion,
+      url,
+      id_grupoFk,
+      id_asignatura,
+      id_funcionario,
+      fec_entre,
+      tipo_eva,
+    });
 
-
+    return res
+      .status(201)
+      .json({ success: true, message: "Evaluación creada", data: evaluacion });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Error del servidor" });
+  }
+};
 
 const getEvaluaciones = async (req, res) => {
-    try {
-        const datos_activos = await Evaluaciones.findAll({
-            where: {
-                activo: true
-            }
-        });
+  try {
+    const evaluaciones = await Evaluaciones.findAll({
+      where: { activo: true },
+      include: [
+        { model: Grupo },
+        { model: Asignatura },
+        { model: Funcionario }
+      ]
+    });
+    return res.status(200).json({ success: true, data: evaluaciones });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Error del servidor" });
+  }
+};
 
-        res.status(200).json(datos_activos);
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({
-            message: "Ocurrió un error al recuperar los registros."
-        });
-    }
-}
+const updateEvaluacion = async (req, res) => {
+  const { codigo } = req.params;
+  const {
+    descripcion,
+    url,
+    id_grupoFk,
+    id_asignatura,
+    id_funcionario,
+    fec_entre,
+    tipo_eva,
+  } = req.body;
 
-const createEvaluaciones = async (req, res) =>{
-
- try {
-    const {nombre_tipo_evaluacion, descripcion,url, fec_entre, id_grupo} = req.body;
-    const grupoIsvalidate = await Grupo.findOne({where: {grupcod: id_grupo, activo: true}});
-    if (!grupoIsvalidate) {
-      return res.status(400).json({ message: "El grupo no existe." });
-    }
-
-    
-    
-    await Evaluaciones.create({
-        nombre_tipo_evaluacion,
-        descripcion,
-        url,
-        fec_entre,
-        id_grupo,
-     
-    })
-     res.status(200).json({ message: "Registro creado exitosamente." });
-    
-
-    
-    
- } catch (error) {
-  handleError(res, "Error al crear registro.", 400)
-    console.log(error)
-    
- }
-
-
-}
-
-
-const deletedEvaluaciones = async (req, res) => {
-    try {
-      const { codigo } = req.params;
-      
-      const eliminar = await Evaluaciones.update(
-        { activo: false }, // Marcamos el registro como inactivo
-        {
-          where: {
-            codigo: codigo,
-            activo: true // Aseguramos que el registro esté activo antes de marcarlo como inactivo
-          }
-        }
-      );
   
-      if (eliminar) {
-        res.status(200).json({mensagge:"REGISTRO ELIMINADO EXITOSAMENTE"})
-      } else {
-        res.status(404).send("RGEISTRO NO ENCONTRADO ");
+  const grupo = await Grupo.findByPk(id_grupoFk);
+  if (!grupo) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Grupo no encontrado" });
+  }
+
+  const asignatura = await Asignatura.findByPk(id_asignatura);
+  if (!asignatura) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Asignatura no encontrada" });
+  }
+
+  const funcionario = await Funcionario.findByPk(id_funcionario);
+  if (!funcionario) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Funcionario no encontrado" });
+  }
+
+  const tipoEva = await Tipo_evaluacion.findByPk(tipo_eva);
+  if (!tipoEva) {
+    return res
+      .status(400)
+      .json({ success: false, message: "Tipo de evaluación no encontrado" });
+  }
+
+  try {
+    const evaluacion = await Evaluaciones.findByPk(codigo);
+    if (!evaluacion) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Evaluación no encontrada" });
+    }
+
+    await evaluacion.update({
+      descripcion,
+      url,
+      id_grupoFk,
+      id_asignatura,
+      id_funcionario,
+      fec_entre,
+      tipo_eva,
+    });
+
+    return res
+      .status(200)
+      .json({
+        success: true,
+        message: "Evaluación actualizada",
+        data: evaluacion,
+      });
+  } catch (error) {
+    console.error(error);
+    return res
+      .status(500)
+      .json({ success: false, message: "Error del servidor" });
+  }
+};
+
+const deleteEvaluacion = async (req, res) => {
+  try {
+    const { codigo } = req.params;
+
+  
+    const evalData = await Evaluaciones.findOne({
+      where: {
+        codigo: codigo,
+      },
+    });
+
+    if (!evalData) {
+      return res
+        .status(404)
+        .json({ success: false, message: "La evaluación no existe" });
+    }
+
+    await Evaluaciones.update(
+      { activo: false },
+      {
+        where: {
+          codigo: codigo,
+        },
       }
-    } catch (error) {
-      console.log(error);
-      handleError(res,   {mensagge:"ERROR AL ELIMINAR REGISTRO"}  , 400);
-    }
-  };
-  
+    );
 
+    res
+      .status(200)
+      .json({ success: true, message: "Evaluación desactivada exitosamente" });
+  } catch (error) {
+    console.error("Error al desactivar la evaluación:", error);
+    handleError(res, "Error interno del servidor", error, 500);
+  }
+};
 module.exports = {
-    getEvaluaciones,
-    createEvaluaciones,
-    deletedEvaluaciones
-}
+  createEvaluacion,
+  getEvaluaciones,
+  updateEvaluacion,
+  deleteEvaluacion,
+};

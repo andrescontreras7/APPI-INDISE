@@ -6,9 +6,9 @@ const  {validationResult} = require ("express-validator")
         return next();
     }catch(error){
 
-        res.status(403).json({
+        res.status(400).json({
                 type:"error",
-                code:403,
+                code:400,
                 message:error.array()
         })
 

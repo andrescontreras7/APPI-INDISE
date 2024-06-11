@@ -27,9 +27,14 @@ const Grupo = sequelize.define(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
+    activo: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    },
   },
   {
-    timestamps: false,
+    timestamps: true,
   }
 );
 

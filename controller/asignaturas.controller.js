@@ -123,7 +123,7 @@ const createAsignaturas = async (req, res) => {
       url,
       asigcod: generarCodigo(),
     });
-    return res.status(200).json({
+    return res.status(201).json({
       success: true,
       message: "Asignatura creada exitosamente",
       data: Info,

@@ -43,22 +43,21 @@ const getAreas = async (req, res) => {
  * @param {*} req 
  * @param {*} res 
  */
-const getArea = async (req,res) => {
-  try{
-   
-    const { cod_area } = req.params // se aplica destructuracion
-    console.log(cod_area)
-    const data = await Area.findByPk(cod_area) // se usa la funcion del sequelize al modelo
-    res.send({data})
-  
+ const getArea = async (req, res) => {
+  try {
+    const { cod_area } = req.params;
+    const data = await Area.findByPk(cod_area);
 
+    if (!data) {
+      return res.status(404).json({success:true, message: "No se encontró el área con el código proporcionado." });
+    }
 
-  }catch(e){
-    console.log(e)
-    handleError(res, "error en esa verga" )
+    res.status(200).send({ data });
+  } catch (e) {
+    console.error(e);
+    res.status(500).json({ success:false, message: "Ocurrió un error al obtener el área." });
   }
-
-}
+};
 
 
 
@@ -80,13 +79,13 @@ const updateArea = async (req, res) => {
     const area = await Area.findByPk(cod_area); // Busca el registro por su ID
     if (area) {
       await area.update(body); // Actualiza los datos del registro con los nuevos datos
-     res.status(200).json({ success: true, message: "Área actualizada exitosamente", data: area }); // Envía una respuesta de éxito si la actualización fue exitosa
+     res.status(200).json({ success: true, message: "Área actualizada exitosamente" }); // Envía una respuesta de éxito si la actualización fue exitosa
     } else {
-      res.status(404).send('Registro no encontrado'); // Envía una respuesta de error si el registro no existe
+      res.status(404).json({sucess:false,   message:"Registron no encontrado"}); // Envía una respuesta de error si el registro no existe
     }
   } catch (error) {
     console.error('Error al actualizar el área:', error);
-    res.status(500).send('Error al actualizar el área'); // Envía una respuesta de error si ocurre alguna excepción
+    res.status(500).json({success:false,   message:"eeror al actualizart el area"}); // Envía una respuesta de error si ocurre alguna excepción
   }
 }
 
