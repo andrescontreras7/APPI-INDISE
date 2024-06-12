@@ -179,6 +179,23 @@ const getEvaluacionesPorId = async (req, res) => {
   }
 }
 
+const getTipoEvaluaciones = async (req, res) => {
+  try {
+      const datos_activos = await Tipo_evaluacion.findAll({
+          where: {
+              activo: true
+          }
+      });
+
+      res.status(200).json(datos_activos);
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({
+          message: "Ocurrió un error al recuperar los registros."
+      });
+  }
+}
+
 const getEvaluacionesPorFuncionario = async (req, res) => {
   const {id_funcionario}  = req.params;
   try {
@@ -198,6 +215,26 @@ const getEvaluacionesPorFuncionario = async (req, res) => {
   }
 }
 
+const getEvaluacionesPorGrupoAsig = async (req, res) => {
+  const {idasig,idgrupo}  = req.params;
+
+  try {
+      const datos_activos = await Evaluaciones.findAll({
+          where: {
+              activo: true,
+              id_grupoFK: idgrupo,
+              id_asignatura: idasig
+          }
+      });
+
+      res.status(200).json(datos_activos);
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({
+          message: "Ocurrió un error al recuperar los registros."
+      });
+  }
+}
 
 const getEvaluacionesEstudiantes = async (req, res) => {
   const {id_tarea}  = req.params;
@@ -222,6 +259,7 @@ const createEvaluaciones = async (req, res) =>{
 
  try {
     const {codigo, nombre_tipo_evaluacion, descripcion,url, fec_entre, id_asignatura, id_funcionario, id_grupoFK, tipo_eva} = req.body;
+
     const grupoIsvalidate = await Grupo.findOne({where: {grupcod: id_grupoFK, activo: true}});
     if (!grupoIsvalidate) {
       return res.status(400).json({ message: "El grupo no existe." });
@@ -297,5 +335,7 @@ module.exports = {
   deleteEvaluacion,
   getEvaluacionesPorFuncionario,
   getEvaluacionesPorId,
-  getEvaluacionesEstudiantes
+  getTipoEvaluaciones,
+  getEvaluacionesEstudiantes,
+  getEvaluacionesPorGrupoAsig
 };

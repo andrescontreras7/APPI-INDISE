@@ -13,8 +13,16 @@ const Evaluaciones = sequelize.define(
       primaryKey: true,
       defaultValue: DataTypes.UUIDV1,
     },
-
-   
+    nombre_tipo_evaluacion: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: "la descripcion no puede esatr vacia no puede estar vacío",
+        },
+      },
+    },
     descripcion: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -52,16 +60,6 @@ const Evaluaciones = sequelize.define(
         notEmpty: {
           args: true,
           msg: "El id del funcionario no puede estar vacío",
-        },
-      },
-    },
-    tipo_eva: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          args: true,
-          msg: "El id del tipo no puede estar vacío",
         },
       },
     },

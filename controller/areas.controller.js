@@ -23,7 +23,7 @@ const getAreas = async (req, res) => {
     });
     res.status(200).json({success:true, data: datos_activos });
   } catch (e) {
-    handleError(res, "Error al recuperar los registros", 500);
+    // handleError(res, "Error al recuperar los registros", 500);
     console.log(e);
   }
 };
@@ -109,7 +109,7 @@ const createArea = async (req, res) => {
     res.status(201).json({success:true,  message: "Área creada exitosamente", data: areaData });
   } catch (error) {
     console.error("Error al crear el área:", error);
-    handleError(res, "Error al crear nueva área", 500);
+    // handleError(res, "Error al crear nueva área", 500);
   }
 };
 

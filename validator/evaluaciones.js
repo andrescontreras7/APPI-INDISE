@@ -8,7 +8,7 @@ exports.createEvaluacionValidator = [
   check('url')
     .notEmpty()
     .withMessage('El campo \'url\' no puede estar vacío'),
-  check('id_grupoFk')
+  check('id_grupoFK')
     .notEmpty()
     .withMessage('El campo \'id_grupoFk\' no puede estar vacío'),
   check('id_asignatura')

@@ -2,7 +2,7 @@ const { DataTypes, UUIDV1, UUID } = require("sequelize");
 const { sequelize } = require("../config/mysql");
 
 const Tipo_evaluacion = sequelize.define(
-  "Tipo_evaluacion",
+  "tipo_evaluacion",
   {
     nombre_tipo_evaluacion: {
       type: DataTypes.INTEGER,
