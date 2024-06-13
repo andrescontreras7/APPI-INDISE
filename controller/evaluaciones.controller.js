@@ -4,6 +4,7 @@ const { Asignatura } = require("../models/areas");
 const Funcionario = require("../models/funcionario");
 const Tipo_evaluacion = require("../models/tipoEva");
 const { where, Model } = require("sequelize");
+const Envio = require('../models/envio_tareas.js');
 
 
 const createEvaluacion = async (req, res) => {
@@ -159,6 +160,138 @@ const updateEvaluacion = async (req, res) => {
       .json({ success: false, message: "Error del servidor" });
   }
 };
+const getEvaluacionesPorId = async (req, res) => {
+  const {codigo}  = req.params;
+  try {
+      const datos_activos = await Evaluaciones.findOne({
+          where: {
+              activo: true,
+              codigo: codigo
+          }
+      });
+
+      res.status(200).json(datos_activos);
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({
+          message: "Ocurrió un error al recuperar los registros."
+      });
+  }
+}
+
+const getTipoEvaluaciones = async (req, res) => {
+  try {
+      const datos_activos = await Tipo_evaluacion.findAll({
+          where: {
+              activo: true
+          }
+      });
+
+      res.status(200).json(datos_activos);
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({
+          message: "Ocurrió un error al recuperar los registros."
+      });
+  }
+}
+
+const getEvaluacionesPorFuncionario = async (req, res) => {
+  const {id_funcionario}  = req.params;
+  try {
+      const datos_activos = await Evaluaciones.findAll({
+          where: {
+              activo: true,
+              id_funcionario: id_funcionario
+          }
+      });
+
+      res.status(200).json(datos_activos);
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({
+          message: "Ocurrió un error al recuperar los registros."
+      });
+  }
+}
+
+const getEvaluacionesPorGrupoAsig = async (req, res) => {
+  const {idasig,idgrupo}  = req.params;
+
+  try {
+      const datos_activos = await Evaluaciones.findAll({
+          where: {
+              activo: true,
+              id_grupoFK: idgrupo,
+              id_asignatura: idasig
+          }
+      });
+
+      res.status(200).json(datos_activos);
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({
+          message: "Ocurrió un error al recuperar los registros."
+      });
+  }
+}
+
+const getEvaluacionesEstudiantes = async (req, res) => {
+  const {id_tarea}  = req.params;
+  try {
+      const datos_activos = await Envio.findAll({
+          where: {
+              activo: true,
+              id_tarea: id_tarea
+          }
+      });
+
+      res.status(200).json(datos_activos);
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({
+          message: "Ocurrió un error al recuperar los registros."
+      });
+  }
+}
+
+const createEvaluaciones = async (req, res) =>{
+
+ try {
+    const {codigo, nombre_tipo_evaluacion, descripcion,url, fec_entre, id_asignatura, id_funcionario, id_grupoFK, tipo_eva} = req.body;
+
+    const grupoIsvalidate = await Grupo.findOne({where: {grupcod: id_grupoFK, activo: true}});
+    if (!grupoIsvalidate) {
+      return res.status(400).json({ message: "El grupo no existe." });
+    }
+
+    
+    
+    await Evaluaciones.create({
+        codigo,
+        nombre_tipo_evaluacion,
+        descripcion,
+        url,
+        fec_entre,
+        id_grupoFK,
+        id_asignatura,
+        id_funcionario,
+        tipo_eva
+     
+    })
+     res.status(200).json({ message: "Registro creado exitosamente." });
+    
+
+    
+    
+ } catch (error) {
+  handleError(res, "Error al crear registro.", 400)
+    console.log(error)
+    
+ }
+
+
+}
 
 const deleteEvaluacion = async (req, res) => {
   try {
@@ -195,8 +328,14 @@ const deleteEvaluacion = async (req, res) => {
   }
 };
 module.exports = {
-  createEvaluacion,
   getEvaluaciones,
+  createEvaluacion,
   updateEvaluacion,
+  createEvaluaciones,
   deleteEvaluacion,
+  getEvaluacionesPorFuncionario,
+  getEvaluacionesPorId,
+  getTipoEvaluaciones,
+  getEvaluacionesEstudiantes,
+  getEvaluacionesPorGrupoAsig
 };

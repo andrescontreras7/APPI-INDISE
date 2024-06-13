@@ -13,8 +13,16 @@ const Evaluaciones = sequelize.define(
       primaryKey: true,
       defaultValue: DataTypes.UUIDV1,
     },
-
-   
+    nombre_tipo_evaluacion: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: "la descripcion no puede esatr vacia no puede estar vacío",
+        },
+      },
+    },
     descripcion: {
       type: DataTypes.STRING,
       allowNull: false,
@@ -35,14 +43,23 @@ const Evaluaciones = sequelize.define(
         },
       },
     },
-  
-    id_grupoFk: {
+    id_grupoFK: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
         notEmpty: {
           args: true,
           msg: "El id del grupo no puede estar vacío",
+        },
+      },
+    },
+    id_funcionario: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: "El id del funcionario no puede estar vacío",
         },
       },
     },
@@ -56,17 +73,6 @@ const Evaluaciones = sequelize.define(
         },
       },
     },
-    id_funcionario: {
-      type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          args: true,
-          msg: "El id del funcionario no puede estar vacío",
-        },
-      },
-      },
-
     fec_entre: {
       type: DataTypes.DATE,
       allowNull: false,

@@ -11,7 +11,7 @@ const sing = await jwt.sign(
     },
     JWT_SECRET,
     {
-        expiresIn :"2h"
+        expiresIn :"8h"
     }
 
     

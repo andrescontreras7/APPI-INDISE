@@ -7,6 +7,8 @@ const estudianteRouter = express.Router()
 
 
 estudianteRouter.get("/appi/estudiante",authMidd, checkRol() ,  getEstudiantes)
+estudianteRouter.get("/appi/estudiante/:estudid",authMidd,  getEstudiante)
+
 estudianteRouter.post("/appi/estudiante/create",createStudentValidator, authMidd , checkRol(), createEstudiante)
 estudianteRouter.post("/appi/validate/cuenta/:token")
 estudianteRouter.get("/appi/estudiante/informacion", authMidd, getAllInformation)
