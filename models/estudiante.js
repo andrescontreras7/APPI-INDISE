@@ -120,15 +120,8 @@ const Estudiante = sequelize.define(
     },
     acudienteFK:{
       type: DataTypes.INTEGER,
-      allowNull: false,
-      validate: {
-        notNull: {
-          msg: "El campo 'acudienteFK' es obligatorio.",
-        },
-        isInt: {
-          msg: "El campo 'acudienteFK' debe ser un número entero.",
-        },
-      },
+      allowNull: true,
+      
     },
     tok: {
       type: DataTypes.INTEGER,

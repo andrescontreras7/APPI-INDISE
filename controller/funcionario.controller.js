@@ -1,6 +1,6 @@
 const _ = require('lodash');
 const  Funcionario  = require("../models/funcionario.js")
-const  {HanledError} = require('../utils/CapError.js')
+
 const {tokenSign} = require("../utils/handlejwt.js")
 const {encrypt , compare} =require("../utils/handlePassword.js")
 const { Op } = require('sequelize');
@@ -48,6 +48,17 @@ const createFuncionario = async (req, res) => {
 
     if (correFun) {
       return res.status(400).json({success:false, message: 'El correo del funcionario ingresado ya existe' });
+    }
+    
+    // Verificar que el jefe de área exista
+    const jefeArea = await Funcionario.findOne({
+      where: {
+        funcid: jefe_areaFK
+      }
+    });
+
+    if (!jefeArea) {
+      return res.status(400).json({success:false, message: 'El jefe de área ingresado no existe' });
     }
 
     // Encriptar la contraseña
@@ -99,6 +110,7 @@ const UpdateFuncionario = async (req, res) => {
   } catch (error) {
       console.error('Error al actualizar el registro:', error);
       return res.status(500).json({ error: 'Error al actualizar el registro' });
+
      
   }
 };
