@@ -2,7 +2,6 @@ const  {handleError} = require('../utils/CapError.js')
 const Asistencias_estudiantes  = require("../models/asistencias_estudiantes.js")
 const {Asignatura} = require("../models/areas.js")
 const  Grado = require("../models/grado.js")
-
 const Estudiante = require('../models/estudiante.js')
 const generarCodigo = require('../helpers/generarCodigo.js')
 const AsignaturaDocente = require('../models/asignatura-docente.js')
@@ -41,7 +40,15 @@ const getAsistencias_E = async (req, res) => {
 
 const getFilterGrupo = async (req,res) =>{
     const {grupcod}  = req.params;
-    console.log(grupcod)
+
+    const  verfify = await Grupo.findByPk(grupcod)
+    if(!verfify){
+        return res.status(404).json({
+            sucess: false,
+            message: "Grupo no encontrado"
+        })
+    }
+  
     let datos = await Asistencias_estudiantes.findAll({
         where: {
             grupoFK: grupcod,
@@ -60,7 +67,7 @@ const getFilterGrupo = async (req,res) =>{
      
     })
     if(datos){
-        res.status(200).json({data:{datos}})
+        res.status(200).json({sucess :true,  data:datos })
     }
     else{
         res.status(404).json({
@@ -83,7 +90,7 @@ const createAsistencia_E = async (req, res) => {
         // Validar que el grupo exista
         const grupo = await Grupo.findByPk(grupoFK);
         if (!grupo) {
-            return res.status(404).json({ error: "Grupo no encontrado" });
+            return res.status(404).json({sucess:false, message: "Grupo no encontrado" });
         }
 
         // Validar que la asignatura exista
@@ -94,7 +101,7 @@ const createAsistencia_E = async (req, res) => {
             }
         });
         if (!asignatura) {
-            return res.status(404).json({ error: "Asignatura no encontrada" });
+            return res.status(404).json({sucess:false, message: "Asignatura no encontrada" });
         }
 
         const newAsistencia = await Asistencias_estudiantes.create({
@@ -141,11 +148,18 @@ const createAsistencia_E = async (req, res) => {
     }
   };
 
-
-
   const getAsistenciasPorGrupoYAsignatura = async (req, res) => {
     try {
         const { grupcod, asigcod } = req.params;
+        const grupo = await Grupo.findByPk(grupcod);
+        if (!grupo) {
+            return res.status(404).json({sucess:false, message: "Grupo no encontrado" });
+        }
+
+        const asignatura = await Asignatura.findByPk(asigcod);
+        if (!asignatura) {
+            return res.status(404).json({ sucess:false, message: "Asignatura no encontrada" });
+        }
 
         const datos = await Asistencias_estudiantes.findAll({
             where: {
@@ -167,9 +181,9 @@ const createAsistencia_E = async (req, res) => {
         });
 
         if (datos.length > 0) {
-            res.status(200).json({ data: datos });
+            res.status(200).json({sucess:true, data: datos });
         } else {
-            res.status(404).json({ message: "No se encontraron registros" });
+            res.status(404).json({sucess:false, message: "No se encontraron registros" });
         }
     } catch (error) {
         handleError(res, "Error al obtener asistencias");
@@ -177,7 +191,25 @@ const createAsistencia_E = async (req, res) => {
     }
 };
 
-module.exports = { getAsistencias_E, getFilterGrupo, createAsistencia_E, getAsistenciasPorGrupoYAsignatura };
+const deleteAsistencia = async (req, res) => {
+    try {
+        const { cod_asi } = req.params;
+        const asistencia = await Asistencias_estudiantes.findByPk(cod_asi);
+        if (!asistencia) {
+            return res.status(404).json({ error: "Asistencia no encontrada" });
+        }
+        await Asistencias_estudiantes.update({ activo: false }, { where: { cod_asi: cod_asi } });
+        res.status(200).json({ message: "Asistencia eliminada" });
+     }
+     catch (error) {
+         handleError(res, "Error al eliminar asistencia",   );
+        
+         console.log(error);
+     }
+
+}
+
+module.exports = { getAsistencias_E,deleteAsistencia, getFilterGrupo, createAsistencia_E, getAsistenciasPorGrupoYAsignatura };
  
 
 

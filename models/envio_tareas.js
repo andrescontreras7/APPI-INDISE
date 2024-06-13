@@ -41,6 +41,27 @@ const Envio = sequelize.define('Envio',
         }
       }
     },
+    descripcion: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'el campo descripcion no puede estar vacío'
+        }
+      }
+    },
+    nota: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      validate: {
+        notEmpty: {
+          args: true,
+          msg: 'el campo nota no puede estar vacío'
+        }
+      }
+    },
+   
    
     fec_envio:{
       type: DataTypes.DATE,

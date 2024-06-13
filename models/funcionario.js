@@ -90,6 +90,14 @@ const Funcionario = sequelize.define(
       allowNull: false,
       defaultValue: true
     },
+    resetPasswordToken: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    resetPasswordExpires: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
     // Fecha de creación del registro
     createdAt: {
       type: DataTypes.DATE,

@@ -80,7 +80,7 @@ const updateGrado = async (req, res) => {
     const { id } = req.params;
     const { nombre_grado, descripcion, periodo_FK, año_escolar } = req.body;
 
-    // Verificar si el grado existe
+   
     const grado = await Grado.findOne({
       where: { grado_id: id },
     });

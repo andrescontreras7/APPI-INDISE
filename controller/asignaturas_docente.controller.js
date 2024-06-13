@@ -4,6 +4,7 @@ const Funcionario = require("../models/funcionario");
 const Grupo = require("../models/grupo");
 const Grado = require("../models/grado");
 const { Estudiante } = require("../models");
+const generarCodigo = require("../helpers/generarCodigo");
 
 const getAsignaturaDocente = async (req, res) => {
   try {
@@ -87,10 +88,26 @@ const getDocenteAsignatura = async (req, res) => {
 
 const createAsignaturaDocente = async (req, res) => {
   try {
-    const { asignaturaAsigcod, funcionarioFuncid } = req.body;
+    const { asignaturaAsigcod, funcionarioFuncid, grupoFK } = req.body;
 
-    // Verificar si la asignatura existe
-    const asignatura = await Asignatura.findByPk(asignaturaAsigcod);
+    const grupo = await Grupo.findOne({
+      where: {
+        grupcod: grupoFK,
+      },
+    })
+    if (!grupo) {
+      return res.status(404).json({
+        success: false,
+        error: "Grupo no encontrado",
+      });
+    }
+
+
+    const asignatura = await Asignatura.findOne(
+      {
+        asigcod:asignaturaAsigcod 
+      }
+    );
     if (!asignatura) {
       return res.status(404).json({
         success: false,
@@ -99,7 +116,9 @@ const createAsignaturaDocente = async (req, res) => {
     }
 
     // Verificar si el docente existe
-    const docente = await Funcionario.findByPk(funcionarioFuncid);
+    const docente = await Funcionario.findOne({
+    where: { funcid: funcionarioFuncid }
+    } );
     if (!docente) {
       return res.status(404).json({
         success: false,
@@ -110,6 +129,8 @@ const createAsignaturaDocente = async (req, res) => {
     const dt = await AsignaturaDocente.create({
       asignaturaAsigcod,
       funcionarioFuncid,
+      grupoFK,
+      id:generarCodigo()
     });
 
     return res.status(201).json({
@@ -117,12 +138,14 @@ const createAsignaturaDocente = async (req, res) => {
       data: dt,
     });
   } catch (error) {
+    console.log(error);
     return res.status(500).json({
       success: false,
       error: "Server Error",
     });
   }
 };
+
 const getAll = async (req, res) => {
   try {
     const asignaturaDocente = await AsignaturaDocente.findAll({

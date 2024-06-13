@@ -23,6 +23,7 @@ const asigEstudiantes = require("./routes/asigna_est.routes.js");
 const clasesRouter = require("./routes/clases.routes.js");
 const Temas = require("./routes/tematicas.routes.js");
 const TemasGrup = require("./routes/temasGrup.routes.js");
+const routerE = require("./routes/email.routes.js");
 
 require("dotenv").config()
 
@@ -51,6 +52,7 @@ app.use(acudienteRouter)
 app.use(horasRouter)
 app.use(observadorRouter)
 app.use(EvaluacionesRouter)
+app.use(routerE)
 
 app.use(periodosRoutes)
 app.use(gradosRoutes)

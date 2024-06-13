@@ -25,7 +25,7 @@ const AsignaturaDocente = sequelize.define(
     
     tematicasFK:{
       type: DataTypes.INTEGER,
-      allowNull: false,
+      allowNull: true,
    
     },
     activo: {

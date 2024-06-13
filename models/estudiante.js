@@ -52,6 +52,14 @@ const Estudiante = sequelize.define(
       },
     
     },
+    resetPasswordToken: {
+      type: DataTypes.STRING,
+      allowNull: true,
+    },
+    resetPasswordExpires: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
     estudcorreo: {
       type: DataTypes.STRING,
       allowNull: false,

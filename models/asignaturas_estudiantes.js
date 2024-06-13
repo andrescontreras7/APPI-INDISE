@@ -17,6 +17,11 @@ const AsignaturaEstudiante = sequelize.define(
       allowNull: false,
       
     },
+    id : {
+      type: DataTypes.INTEGER,
+      primaryKey: true,
+      allowNull: false,
+    },
 
   activo: {
     type: DataTypes.BOOLEAN,

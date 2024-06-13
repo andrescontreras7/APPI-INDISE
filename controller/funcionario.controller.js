@@ -24,47 +24,54 @@ const getFuncionarios = async (req, res) =>{
     }
 }
 
-const createFuncionario  = async (req, res) => {
-        try {
-          const {funcid,funccorreo,funcapellido, funcnombre,funcrol,jefe_areaFK,passwordFuncionario,telefono,rolFK    } = req.body;
-          if (_.isNil(funcid)  || _.isNil(jefe_areaFK)  || _.isEmpty(passwordFuncionario)  || _.isEmpty(funccorreo) || _.isEmpty(funcapellido) || _.isEmpty(funcnombre) || _.isNil(telefono) || _.isNil(rolFK) || _.isEmpty(funcrol)){
-            res.status(422).json({mensage:"UNO O MAS CAMPOS VACIOS "})
-        
-          }
-          else{
-            
-          }
-          const passwordHash = await encrypt(passwordFuncionario)
-         
-          const user = await Funcionario.findOne({
-           where: {
-              [Op.or]: [{ funcid }, { funccorreo }]
-            }
-          });
-       
+const createFuncionario = async (req, res) => {
+  try {
+    const { funcid, funccorreo, funcapellido, funcnombre, funcrol, jefe_areaFK, passwordFuncionario, telefono, rolFK } = req.body;
 
-          if (!user) {
-            const datosE = await Funcionario.create({funcid,  funcnombre,funcapellido,funccorreo, funcrol, passwordFuncionario:passwordHash ,jefe_areaFK,telefono,rolFK  });
-            const datafuncionarios ={
-              id:funcid,
-              rol:funcrol
+  
+    const idFun = await Funcionario.findOne({
+      where: {
+        funcid: funcid
+      }
+    });
 
+    if (idFun) {
+      return res.status(400).json({success:false, message: 'El ID del funcionario ingresado ya existe' });
+    }
 
-            }
-            console.log(datafuncionarios.id)
-            const token = await tokenSign(datafuncionarios);
-            console.log(token)
-        
-            return res.status(200).json({ message: "funcionario   creado de manera exitosa" });
-          
-          } else {
-            console.log("Error, el id del funcionario o el corrreo  ya existe");
-            return res.status(500).json({ message: "Error, el id del funcionario o el corrreo  ya existe" });
-          }
-        } catch (e) {
-          HanledError(res, "Error al crear funcionario");
-          console.log(e)
-        }
+ 
+    const correFun = await Funcionario.findOne({
+      where: {
+        funccorreo: funccorreo
+      }
+    });
+
+    if (correFun) {
+      return res.status(400).json({success:false, message: 'El correo del funcionario ingresado ya existe' });
+    }
+
+    // Encriptar la contraseña
+    const passwordHash = await encrypt(passwordFuncionario);
+
+    // Crear el nuevo funcionario
+    const datosE = await Funcionario.create({ funcid, funcnombre, funcapellido, funccorreo, funcrol, passwordFuncionario: passwordHash, jefe_areaFK, telefono, rolFK });
+
+    const datafuncionarios = {
+      id: funcid,
+      rol: funcrol
+    }
+
+    // Generar el token
+    const token = await tokenSign(datafuncionarios);
+    console.log(token);
+
+    // Enviar la respuesta
+    res.status(201).json({ success: true, message: "Funcionario creado exitosamente", token: token });
+
+  } catch (e) {
+    console.log(e);
+    res.status(500).json({ success: false, message: "Error al crear el registro" });
+  }
 };
 
 

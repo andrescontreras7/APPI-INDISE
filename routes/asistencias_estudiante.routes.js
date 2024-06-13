@@ -7,7 +7,7 @@ const asistenciasRouter = express.Router();
 
 
 asistenciasRouter.get("/appi/asistenciaEstudiantes",    authMidd, checkRol(), getAsistencias_E   )
-asistenciasRouter.post("/appi/asistenciaEstudiantes/fillter-grupo/:grupcod", getFilterGrupo   )
+asistenciasRouter.put("/appi/asistenciaEstudiantes/fillter-grupo/:grupcod", getFilterGrupo   )
 asistenciasRouter.post("/appi/asistenciaEstudiantes/create",createAsistenciaValidator, createAsistencia_E   )
 asistenciasRouter.put("/appi/asistenciaEstudiantes/getAll/:asigcod/:grupcod", getAsistenciasPorGrupoYAsignatura   )
 

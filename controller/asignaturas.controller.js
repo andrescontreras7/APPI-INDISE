@@ -146,6 +146,24 @@ const createAsignaturas = async (req, res) => {
 const deleteAsignaturas = async (req, res) => {
   try {
     const { asigcod } = req.params;
+
+    const asig_estado = await Asignatura.findOne({
+      where: {
+        asigcod: asigcod,
+        activo: true,
+      },
+
+
+    });
+    if (!asig_estado) {
+      return res.status(404).json({
+        success: false,
+        message: "Asignatura no encontrada",
+      });
+    }
+
+
+
     const verfify = await AsignaturaDocente.findOne({
       where: {
         asignaturaAsigcod: asigcod,

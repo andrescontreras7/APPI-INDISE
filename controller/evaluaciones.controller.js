@@ -102,28 +102,28 @@ const updateEvaluacion = async (req, res) => {
   const grupo = await Grupo.findByPk(id_grupoFk);
   if (!grupo) {
     return res
-      .status(400)
+      .status(404)
       .json({ success: false, message: "Grupo no encontrado" });
   }
 
   const asignatura = await Asignatura.findByPk(id_asignatura);
   if (!asignatura) {
     return res
-      .status(400)
+      .status(404)
       .json({ success: false, message: "Asignatura no encontrada" });
   }
 
   const funcionario = await Funcionario.findByPk(id_funcionario);
   if (!funcionario) {
     return res
-      .status(400)
+      .status(404)
       .json({ success: false, message: "Funcionario no encontrado" });
   }
 
   const tipoEva = await Tipo_evaluacion.findByPk(tipo_eva);
   if (!tipoEva) {
     return res
-      .status(400)
+      .status(404)
       .json({ success: false, message: "Tipo de evaluación no encontrado" });
   }
 
