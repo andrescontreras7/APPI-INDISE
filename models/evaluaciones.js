@@ -13,16 +13,7 @@ const Evaluaciones = sequelize.define(
       primaryKey: true,
       defaultValue: DataTypes.UUIDV1,
     },
-    nombre_tipo_evaluacion: {
-      type: DataTypes.STRING,
-      allowNull: false,
-      validate: {
-        notEmpty: {
-          args: true,
-          msg: "la descripcion no puede esatr vacia no puede estar vacío",
-        },
-      },
-    },
+   
     descripcion: {
       type: DataTypes.STRING,
       allowNull: false,

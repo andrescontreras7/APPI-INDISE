@@ -1,18 +1,9 @@
-const  {handleError} = require('../utils/CapError.js');
+const { handleError } = require('../utils/CapError.js');
 const Estudiante = require("../models/estudiante.js");
-const _ = require('lodash');
-const {tokenSign} = require("../utils/handlejwt.js")
-const {encrypt , compare} =require("../utils/handlePassword.js")
-const { Op, json } = require('sequelize');
-const Funcionario = require("../models/funcionario.js")
-const cookieParser = require('cookie-parser');
-
-
-
-
-
-
-
+const Funcionario = require("../models/funcionario.js");
+const { tokenSign } = require("../utils/handlejwt.js");
+const { compare } = require("../utils/handlePassword.js");
+const UserLogin = require("../models/userLogin"); // Importa el modelo UserLogin
 
 const loginAuth = async (req, res) => {
   try {
@@ -24,8 +15,6 @@ const loginAuth = async (req, res) => {
         activo: true,
       },
     });
-    
-  
 
     if (estudiante) {
       const hashPassword = estudiante.password;
@@ -45,11 +34,16 @@ const loginAuth = async (req, res) => {
         token: await tokenSign(user),
         rol: estudiante.rol,
         nombre: estudiante.estudnombre,
-      
       };
 
+      // Registrar el inicio de sesión
+      await UserLogin.create({
+        userType: 'estudiante',
+        userId: estudiante.estudid
+      });
+
       res.status(200).json({ token: dataEstudiante });
-      return; 
+      return;
     }
 
     const funcionario = await Funcionario.findOne({
@@ -80,15 +74,19 @@ const loginAuth = async (req, res) => {
     const user = {
       id: funcionario.funcid,
       rol: funcionario.rolFK,
-     
     };
 
     const dataFuncionario = {
       token: await tokenSign(user),
       rol: funcionario.rolFK,
       nombre: funcionario.funcnombre
-   
     };
+
+    // Registrar el inicio de sesión
+    await UserLogin.create({
+      userType: 'funcionario',
+      userId: funcionario.funcid
+    });
 
     res.status(200).json({ token: dataFuncionario });
   } catch (error) {
@@ -98,5 +96,3 @@ const loginAuth = async (req, res) => {
 };
 
 module.exports = { loginAuth };
-
-

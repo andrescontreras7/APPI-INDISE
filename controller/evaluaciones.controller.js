@@ -5,6 +5,7 @@ const Funcionario = require("../models/funcionario");
 const Tipo_evaluacion = require("../models/tipoEva");
 const { where, Model } = require("sequelize");
 const Envio = require('../models/envio_tareas.js');
+const Estudiante = require("../models/estudiante.js");
 
 
 const createEvaluacion = async (req, res) => {
@@ -243,7 +244,14 @@ const getEvaluacionesEstudiantes = async (req, res) => {
           where: {
               activo: true,
               id_tarea: id_tarea
+          },
+         
+            include: {
+              model: Estudiante,
+              include: Grupo
           }
+          
+       
       });
 
       res.status(200).json(datos_activos);

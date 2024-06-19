@@ -52,6 +52,26 @@ const requestPasswordReset = async (req, res) => {
     }
 };
 
+const sendNewUserEmail = async (userEmail, userPassword) => {
+  try {
+      const mailOptions = {
+          from: 'your-email@gmail.com',
+          to: userEmail,
+          subject: 'Bienvenido al sistema',
+          text: `Se ha creado una nueva cuenta para usted en nuestro sistema.\n\n
+                 Aquí están sus credenciales:\n\n
+                 Correo electrónico: ${userEmail}\n
+                 Contraseña: ${userPassword}\n\n
+                 Por favor, cambie su contraseña lo antes posible por seguridad.\n`
+      };
+
+      await transporter.sendMail(mailOptions);
+  } catch (error) {
+      console.error('Error al enviar el correo de bienvenida:', error);
+      throw error;
+  }
+};
+
 const resetPassword = async (req, res) => {
     try {
       const { token } = req.params;
@@ -93,5 +113,6 @@ const resetPassword = async (req, res) => {
 
 module.exports = {
   requestPasswordReset,
-  resetPassword
+  resetPassword,
+  sendNewUserEmail
 };

@@ -67,14 +67,10 @@ CREATE TABLE `acudientes` (
 /*Data for the table `acudientes` */
 
 insert  into `acudientes`(`id_acu`,`nom_acu`,`ape_acu`,`corr_acu`,`tel_acu`,`activo`,`createdAt`,`updatedAt`,`UUId`) values 
-(1,'Martha sarate','Boze','correo@example.com',322900908,1,'2024-03-27 00:45:14','2024-06-10 21:42:46','9cfda3de-f852-4529-a8c4-d04cfa23cd0a'),
-(1222,'Jhonny alberto','casstillo','email@examples.com',322577236,1,'2024-03-21 02:33:55','2024-03-21 02:51:57',NULL),
+(12221,'Jhonny alberto','casstillo','email@examples.com',322577236,0,'2024-03-21 02:33:55','2024-06-11 18:17:54',NULL),
 (12323,'Jose antonnio','ortega','correoexamples@gmail.com',323456789,1,'2024-04-11 00:18:42','2024-04-11 00:18:42','21bd6955-02f0-4654-abc7-23f2cbe5d7c6'),
-(32132,'Miguel lopez','costa','costa@hotmail.com',322323223,1,'2024-04-11 09:15:29','2024-04-11 09:15:40',NULL),
-(34545,'Carlos arturo','bacca','carlos@outlook.com',349994933,1,'2024-04-11 09:15:32','2024-04-11 09:15:42',NULL),
-(321343,'Yoiner david','ternoa','andresds@gmail.com',320200393,1,'2024-04-11 09:15:34','2024-04-11 09:15:44',NULL),
-(4234234,'Jefrey david','seballos','jefrey@outlook.com',322267277,1,'2024-04-11 09:15:36','2024-04-11 09:15:46',NULL),
-(4343553,'Danitza paola','castro','danitza@gmail.com',328828889,1,'2024-04-11 09:15:38','2024-04-11 09:15:48',NULL);
+(32132,'Miguel lopez','Boze','costa@hotmail.com',322323223,1,'2024-04-11 09:15:29','2024-06-11 18:05:07',NULL),
+(34545,'Carlos arturo','bacca','carlos@outlook.com',349994933,1,'2024-04-11 09:15:32','2024-04-11 09:15:42',NULL);
 
 /*Table structure for table `areas` */
 
@@ -92,13 +88,14 @@ CREATE TABLE `areas` (
 /*Data for the table `areas` */
 
 insert  into `areas`(`cod_area`,`are_nombre`,`activo`,`createdAt`,`updatedAt`) values 
-(14025,'Ciencias humanas  y Sociales',1,'2024-06-11','2024-06-11'),
+(14025,'Ciencias',1,'2024-06-11','2024-06-11'),
 (14991,'Lenguas',1,'2024-06-11','2024-06-11'),
 (20739,'Sociales',1,'2024-06-11','2024-06-11'),
 (27848,'Historia',1,'2024-06-11','2024-06-11'),
 (41892,'Matematicas',1,'2024-06-11','2024-06-11'),
 (61298,'Geopolitica',1,'2024-06-11','2024-06-11'),
-(69103,'geografia',1,'2024-06-11','2024-06-11');
+(69103,'geografia',1,'2024-06-11','2024-06-11'),
+(90884,'Ciencias humanas',1,'2024-06-11','2024-06-11');
 
 /*Table structure for table `asignaturadocentes` */
 
@@ -122,12 +119,16 @@ CREATE TABLE `asignaturadocentes` (
   CONSTRAINT `asignaturadocentes_ibfk_3` FOREIGN KEY (`grupoFK`) REFERENCES `grupos` (`grupcod`),
   CONSTRAINT `asignaturadocentes_ibfk_4` FOREIGN KEY (`tematicasFk`) REFERENCES `tematicas` (`id`),
   CONSTRAINT `asignaturadocentes_ibfk_5` FOREIGN KEY (`asignaturaAsigcod`) REFERENCES `asignaturas` (`asigcod`)
-) ENGINE=InnoDB AUTO_INCREMENT=2323237 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=4434345 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `asignaturadocentes` */
 
 insert  into `asignaturadocentes`(`id`,`asignaturaAsigcod`,`funcionarioFuncid`,`activo`,`createdAt`,`updatedAt`,`grupoFK`,`tematicasFk`) values 
-(2323236,17367,11295345,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',76868,72803);
+(8278,58835,23213,1,'2024-06-13 22:54:48','2024-06-13 22:54:48',80459,NULL),
+(33323,17367,11295345,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',80459,NULL),
+(34243,17367,11295345,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',76868,72803),
+(43434,58835,11295345,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',34342,72803),
+(88144,58835,23213,1,'2024-06-13 22:54:39','2024-06-13 22:54:39',76868,NULL);
 
 /*Table structure for table `asignaturaestudiante` */
 
@@ -139,7 +140,8 @@ CREATE TABLE `asignaturaestudiante` (
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   `asignaturaId` int(11) NOT NULL,
-  PRIMARY KEY (`estudianteId`,`asignaturaId`),
+  `id` int(11) NOT NULL,
+  PRIMARY KEY (`estudianteId`,`asignaturaId`,`id`),
   KEY `asignaturaId` (`asignaturaId`),
   CONSTRAINT `asignaturaestudiante_ibfk_1` FOREIGN KEY (`estudianteId`) REFERENCES `estudiantes` (`estudid`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `asignaturaestudiante_ibfk_2` FOREIGN KEY (`asignaturaId`) REFERENCES `asignaturas` (`asigcod`)
@@ -147,8 +149,10 @@ CREATE TABLE `asignaturaestudiante` (
 
 /*Data for the table `asignaturaestudiante` */
 
-insert  into `asignaturaestudiante`(`estudianteId`,`activo`,`createdAt`,`updatedAt`,`asignaturaId`) values 
-(123123214,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',17367);
+insert  into `asignaturaestudiante`(`estudianteId`,`activo`,`createdAt`,`updatedAt`,`asignaturaId`,`id`) values 
+(133,1,'0000-00-00 00:00:00','0000-00-00 00:00:00',17367,0),
+(133,1,'2024-06-12 19:53:53','2024-06-12 19:53:53',58835,0),
+(112312334,0,'2024-06-12 20:08:01','2024-06-12 22:36:16',16767,1972);
 
 /*Table structure for table `asignaturas` */
 
@@ -171,9 +175,10 @@ CREATE TABLE `asignaturas` (
 /*Data for the table `asignaturas` */
 
 insert  into `asignaturas`(`asigcod`,`asignombre`,`asigdescripcion`,`activo`,`createdAt`,`updatedAt`,`url`,`areaFK`) values 
-(16767,'Economia','Asignatura Tecnica',1,'2024-06-11','2024-06-11','https://res.cloudinary.com/ddjks1j0d/image/upload/v1718070524/imagenes-proyecto/towsryuk06fipfwfpcoz.jpg',20739),
+(16767,'Economia','Asignatura Tecnica',1,'2024-06-11','2024-06-12','https://res.cloudinary.com/ddjks1j0d/image/upload/v1718070524/imagenes-proyecto/towsryuk06fipfwfpcoz.jpg',20739),
 (17367,'Filosofia','Asignatura Lectiva',1,'2024-06-11','2024-06-11','https://res.cloudinary.com/ddjks1j0d/image/upload/v1718070101/imagenes-proyecto/ygvmkq1bniyhaml79tjl.jpg',14025),
 (58835,'Ingles','Asignatura Tecnica',1,'2024-06-11','2024-06-11','https://res.cloudinary.com/ddjks1j0d/image/upload/v1716845505/imagenes-proyecto/Xs_GrinVuNFnIEmfGSX6FMJiRRuTS0NFyII2oQvYuUFtJIO1h4miZ0mFY1urJNh0SZZ1_ozmkdt.png',14991),
+(71203,'Filosofia','Asignatura lectiva',1,'2024-06-12','2024-06-12','http://example.comsss',27848),
 (78003,'Economia','Asignatura Tecnica',1,'2024-06-11','2024-06-11','https://res.cloudinary.com/ddjks1j0d/image/upload/v1718070533/imagenes-proyecto/wqxllezpfobvnduj3pgl.jpg',20739);
 
 /*Table structure for table `asistencia_funcionario` */
@@ -223,6 +228,10 @@ CREATE TABLE `asistencias_estudiantes` (
 
 /*Data for the table `asistencias_estudiantes` */
 
+insert  into `asistencias_estudiantes`(`cod_asi`,`fec_asi`,`det_asi`,`estudidfk`,`grupoFK`,`activo`,`createdAt`,`updatedAt`,`claseFK`,`asigFk`) values 
+(541,'2024-06-13',0,112312334,80459,1,'2024-06-13 02:25:11','2024-06-13 02:25:11',2,17367),
+(45145,'2024-06-13',0,112312334,80459,1,'2024-06-13 02:33:43','2024-06-13 02:33:43',2,17367);
+
 /*Table structure for table `calificaciones` */
 
 DROP TABLE IF EXISTS `calificaciones`;
@@ -262,27 +271,8 @@ CREATE TABLE `clases` (
 
 /*Data for the table `clases` */
 
-/*Table structure for table `envio` */
-
-DROP TABLE IF EXISTS `envio`;
-
-CREATE TABLE `envio` (
-  `uid` varchar(255) NOT NULL DEFAULT uuid(),
-  `id_estudiante` int(11) NOT NULL,
-  `id_tarea` varchar(255) NOT NULL,
-  `url` varchar(255) NOT NULL,
-  `fec_envio` datetime NOT NULL,
-  `activo` tinyint(1) NOT NULL DEFAULT 1,
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL,
-  PRIMARY KEY (`uid`),
-  KEY `id_estudiante` (`id_estudiante`),
-  KEY `id_tarea` (`id_tarea`),
-  CONSTRAINT `envio_ibfk_1` FOREIGN KEY (`id_estudiante`) REFERENCES `estudiantes` (`estudid`),
-  CONSTRAINT `envio_ibfk_2` FOREIGN KEY (`id_tarea`) REFERENCES `evaluaciones` (`codigo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-/*Data for the table `envio` */
+insert  into `clases`(`claseId`,`fecha`,`grupoId`,`activo`,`createdAt`,`updatedAt`,`asignaturaDocenteId`) values 
+(2,'2024-06-11 16:35:42',76868,1,'2024-06-11 16:35:57','2024-06-11 16:35:55',58835);
 
 /*Table structure for table `envios` */
 
@@ -308,6 +298,9 @@ CREATE TABLE `envios` (
 
 /*Data for the table `envios` */
 
+insert  into `envios`(`uid`,`id_estudiante`,`id_tarea`,`url`,`fec_envio`,`activo`,`createdAt`,`updatedAt`,`descripcion`,`nota`) values 
+('d888e380-2871-11ef-9c92-91facbf84cb4',133,'2343','example.com.com','2024-06-11 00:00:00',1,'2024-06-12 04:11:30','2024-06-12 19:16:47','323232',10);
+
 /*Table structure for table `estudiantes` */
 
 DROP TABLE IF EXISTS `estudiantes`;
@@ -327,6 +320,8 @@ CREATE TABLE `estudiantes` (
   `activo` tinyint(4) DEFAULT NULL,
   `grupoFK` int(100) DEFAULT NULL,
   `acudienteFK` int(11) DEFAULT NULL,
+  `resetPasswordToken` varchar(300) DEFAULT NULL,
+  `resetPasswordExpires` datetime DEFAULT NULL,
   PRIMARY KEY (`estudid`),
   KEY `rol` (`rol`),
   KEY `grupoFK` (`grupoFK`),
@@ -338,12 +333,12 @@ CREATE TABLE `estudiantes` (
 
 /*Data for the table `estudiantes` */
 
-insert  into `estudiantes`(`estudid`,`estudnombre`,`estudapellido`,`estuddireccion`,`estudcorreo`,`estudtelefono`,`rol`,`password`,`tok`,`createdAt`,`updatedAt`,`activo`,`grupoFK`,`acudienteFK`) values 
-(133,'joao','cancelo','el country','joa@gmail.com',32323232,3,'$2a$04$tWdvp48ZlXihdgloGL5jdu4FZcWLM9ORXAnlTaGwclEkwC5InsAY6',NULL,'0000-00-00','0000-00-00',1,76868,NULL),
-(112312334,'Andres','cavadia','ciudadela','cavadia@gmail.com',2147483647,3,'',NULL,'0000-00-00','0000-00-00',1,76868,NULL),
-(123123123,'valeria','bohada','valle country','valerai@gmail.com',2147483647,3,'',NULL,'0000-00-00','0000-00-00',1,NULL,NULL),
-(123123214,'valentina','mestre','valle country','mestre@gmail.com',2147483647,3,'',NULL,'0000-00-00','0000-00-00',1,NULL,NULL),
-(214748347,'luz','sena','7 de abril','dina@gmail.com',3244564,3,'$2a$04$hZdjFBtImwLp/lPHhj3viOyr4lSyj5uWaxit8m.LsU7qpuuWUgIh2',NULL,'0000-00-00','0000-00-00',1,76868,NULL);
+insert  into `estudiantes`(`estudid`,`estudnombre`,`estudapellido`,`estuddireccion`,`estudcorreo`,`estudtelefono`,`rol`,`password`,`tok`,`createdAt`,`updatedAt`,`activo`,`grupoFK`,`acudienteFK`,`resetPasswordToken`,`resetPasswordExpires`) values 
+(133,'joa','cancelo','el country','joa@gmail.com',32323232,3,'$2a$04$tWdvp48ZlXihdgloGL5jdu4FZcWLM9ORXAnlTaGwclEkwC5InsAY6',NULL,'0000-00-00','2024-06-13',1,76868,NULL,NULL,NULL),
+(112312334,'Andres','cavadia','ciudadela','mr.coco14220@gmail.com',2147483647,3,'$2a$04$/ngpFfbVRs0ilqKmRJu9W.khn.sSmC7iLdEMDx5m6HOXzedD6ONLi',NULL,'0000-00-00','2024-06-13',1,80459,NULL,NULL,NULL),
+(123123123,'valeria','bohada','valle country','valerai@gmail.com',2147483647,3,'',NULL,'0000-00-00','0000-00-00',1,80459,NULL,NULL,NULL),
+(123123214,'valentina','mestre','valle country','mestre@gmail.com',2147483647,3,'',NULL,'0000-00-00','0000-00-00',1,34342,NULL,NULL,NULL),
+(214748347,'luz','sena','7 de abril','dina@gmail.com',3244564,3,'$2a$04$hZdjFBtImwLp/lPHhj3viOyr4lSyj5uWaxit8m.LsU7qpuuWUgIh2',NULL,'0000-00-00','0000-00-00',1,76868,NULL,NULL,NULL);
 
 /*Table structure for table `evaluaciones` */
 
@@ -351,7 +346,6 @@ DROP TABLE IF EXISTS `evaluaciones`;
 
 CREATE TABLE `evaluaciones` (
   `codigo` varchar(36) NOT NULL,
-  `nombre_tipo_evaluacion` varchar(255) NOT NULL,
   `descripcion` varchar(255) NOT NULL,
   `activo` tinyint(1) NOT NULL DEFAULT 1,
   `createdAt` datetime NOT NULL,
@@ -361,7 +355,7 @@ CREATE TABLE `evaluaciones` (
   `id_grupoFK` int(11) DEFAULT NULL,
   `id_asignatura` int(11) DEFAULT NULL,
   `id_funcionario` int(11) DEFAULT NULL,
-  `tipo_eva` varchar(100) DEFAULT NULL,
+  `tipo_eva` int(100) DEFAULT NULL,
   PRIMARY KEY (`codigo`),
   KEY `id_grupoFK` (`id_grupoFK`),
   KEY `id_asignatura` (`id_asignatura`),
@@ -370,10 +364,14 @@ CREATE TABLE `evaluaciones` (
   CONSTRAINT `evaluaciones_ibfk_1` FOREIGN KEY (`id_grupoFK`) REFERENCES `grupos` (`grupcod`),
   CONSTRAINT `evaluaciones_ibfk_3` FOREIGN KEY (`id_asignatura`) REFERENCES `asignaturas` (`asigcod`),
   CONSTRAINT `evaluaciones_ibfk_4` FOREIGN KEY (`id_funcionario`) REFERENCES `funcionario` (`funcid`),
-  CONSTRAINT `evaluaciones_ibfk_5` FOREIGN KEY (`tipo_eva`) REFERENCES `tipo evaluacion` (`codigo`)
+  CONSTRAINT `evaluaciones_ibfk_5` FOREIGN KEY (`tipo_eva`) REFERENCES `tipo_evaluacions` (`codigo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `evaluaciones` */
+
+insert  into `evaluaciones`(`codigo`,`descripcion`,`activo`,`createdAt`,`updatedAt`,`fec_entre`,`url`,`id_grupoFK`,`id_asignatura`,`id_funcionario`,`tipo_eva`) values 
+('2343','haz la tarea cv',1,'2024-06-11 16:28:14','0000-00-00 00:00:00','1970-01-08 00:00:00','',76868,58835,11295345,987),
+('32323','dsdsd',1,'2024-06-14 01:29:23','2024-06-14 01:29:23','2024-05-31 00:00:00','https://res.cloudinary.com/ddjks1j0d/image/upload/v1718328568/imagenes-proyecto/vnm8ie2gmdpxtz6lvqtn.png',76868,17367,11295345,987);
 
 /*Table structure for table `excusa` */
 
@@ -384,14 +382,11 @@ CREATE TABLE `excusa` (
   `fec_reg_exc` date NOT NULL COMMENT 'fecha registro excusa',
   `mot_reg_exc` varchar(200) NOT NULL COMMENT 'motivo registro excusa',
   `id_persona` int(11) DEFAULT NULL,
-  `tipo_persona` enum('Estudiante','Docente','otro') DEFAULT NULL,
   `activo` tinyint(4) DEFAULT NULL,
   `createdAt` datetime DEFAULT NULL,
   `updatedAt` datetime DEFAULT NULL,
   PRIMARY KEY (`cod_exc`),
-  KEY `id_persona` (`id_persona`),
-  CONSTRAINT `excusa_ibfk_3` FOREIGN KEY (`id_persona`) REFERENCES `funcionario` (`funcid`),
-  CONSTRAINT `excusa_ibfk_4` FOREIGN KEY (`id_persona`) REFERENCES `estudiantes` (`estudid`)
+  KEY `id_persona` (`id_persona`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 /*Data for the table `excusa` */
@@ -424,7 +419,7 @@ CREATE TABLE `excusas` (
 DROP TABLE IF EXISTS `funcionario`;
 
 CREATE TABLE `funcionario` (
-  `funcid` int(11) NOT NULL COMMENT 'Identificación del funcionario',
+  `funcid` int(20) NOT NULL COMMENT 'Identificación del funcionario',
   `funcnombre` varchar(255) NOT NULL,
   `funcapellido` varchar(255) NOT NULL,
   `funccorreo` varchar(255) NOT NULL,
@@ -436,6 +431,9 @@ CREATE TABLE `funcionario` (
   `activo` tinyint(1) DEFAULT NULL COMMENT 'Estado de la tabla para aliminado logico',
   `createdAt` date DEFAULT NULL COMMENT 'fecha de creacion',
   `updatedAt` date DEFAULT NULL COMMENT 'fecha de actualizacion',
+  `resetPasswordToken` varchar(300) DEFAULT NULL,
+  `resetPasswordExpires` date DEFAULT NULL,
+  `token` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`funcid`),
   UNIQUE KEY `funccorreo` (`funccorreo`),
   KEY `jefe_areaFK` (`jefe_areaFK`),
@@ -446,19 +444,20 @@ CREATE TABLE `funcionario` (
 
 /*Data for the table `funcionario` */
 
-insert  into `funcionario`(`funcid`,`funcnombre`,`funcapellido`,`funccorreo`,`funcrol`,`passwordFuncionario`,`jefe_areaFK`,`telefono`,`rolFK`,`activo`,`createdAt`,`updatedAt`) values 
-(4443,'maria','paternina','pa@gmail.com','Coordinador','$2a$04$ioBcqYcOGh6s8ws0iHaLqOzoMZYQ2U9HFurM9W.PgEwVDCUc.EhNy',33424,2147483647,1,0,'2024-04-11','2024-04-11'),
-(23213,'camila','martinez','camila@gmail.com','Coordinador','$2a$04$FNmw5jr64xRzCc5Dr8E/6efUi2ixyLh/9C50cudWYVXf/uqFyDIZS',33424,2147483647,1,1,'2024-03-23','2024-06-07'),
-(32434,'marco','lopez','lopez@gmail.com','docente','sdffdsf',33424,320239230,2,1,NULL,NULL),
-(33424,'luis','contreras','contreras@gmail.com','Coordinador','fsdfsd',NULL,324233333,1,1,'2024-04-11','2024-04-11'),
-(43243,'estafanny','regino','regino@gmail.com','docente','fsdfds',33424,320684011,2,1,'2024-04-11','2024-04-11'),
-(123123,'jose','castro','castro@gmail.com','docente','fsdffds',33424,323432324,2,1,'2024-04-11','2024-04-11'),
-(432432,'pablo','martinez','martinez@gmail.com','docente','fsdfsdf',33424,334325325,2,1,'2024-04-11','2024-04-11'),
-(11295345,'marco','ortiz','marco@gmail.com','docente','$2a$04$JBCYcWRyh381HcfRvutsk.6GLm2T4xnR.7jzkETzXmbC5pgCy88p6',33424,2147483647,2,1,'2024-04-11','2024-04-11'),
-(72041132,'Andrea','cavadia','andrea@gmail.com','Coordinador','$2a$04$P7UtGtll3wCikXQrxtkzIuz7MCBVrd2o.6iHbMsVsDJKB6fP6N3DC',33424,2147483647,1,1,'2024-04-28','2024-04-28'),
-(123123213,'cecilia','nuñez','cecilianuñez@gmail.com','docente','hhhhhfgh',33424,322577235,1,1,'2024-04-11','2024-04-11'),
-(123456789,'Daniela','castilla','daniela@gmail.com','docente','$2a$04$V/0yg6YCDfC1xNgHz3J4nuzXxldv9LusPo1FLJHfNBXA8odvjZ2vm',33424,2147483647,2,1,'2024-05-25','2024-05-25'),
-(2147483647,'Andres','cavadia','contrerass@gmail.com','Coordinador','$2a$04$/uM6lEQqeXcx7XDg2lI5s.DPv2rIT0Mcs8YCQsCDiqInuqmVUNAtG',33424,2147483647,1,1,NULL,NULL);
+insert  into `funcionario`(`funcid`,`funcnombre`,`funcapellido`,`funccorreo`,`funcrol`,`passwordFuncionario`,`jefe_areaFK`,`telefono`,`rolFK`,`activo`,`createdAt`,`updatedAt`,`resetPasswordToken`,`resetPasswordExpires`,`token`) values 
+(4443,'maria','paternina','pa@gmail.com','Coordinador','$2a$04$ioBcqYcOGh6s8ws0iHaLqOzoMZYQ2U9HFurM9W.PgEwVDCUc.EhNy',33424,2147483647,1,0,'2024-04-11','2024-04-11',NULL,NULL,NULL),
+(23213,'camila','martinez','camila@gmail.com','Coordinador','$2a$04$FNmw5jr64xRzCc5Dr8E/6efUi2ixyLh/9C50cudWYVXf/uqFyDIZS',33424,2147483647,1,1,'2024-03-23','2024-06-07',NULL,NULL,NULL),
+(32434,'marco','lopez','lopez@gmail.com','docente','sdffdsf',33424,320239230,2,1,NULL,NULL,NULL,NULL,NULL),
+(33424,'luis','contreras','contreras@gmail.com','Coordinador','fsdfsd',NULL,324233333,1,1,'2024-04-11','2024-04-11',NULL,NULL,NULL),
+(43243,'estafanny','regino','regino@gmail.com','docente','fsdfds',33424,320684011,2,1,'2024-04-11','2024-04-11',NULL,NULL,NULL),
+(123123,'jose','castro','castro@gmail.com','docente','fsdffds',33424,323432324,2,1,'2024-04-11','2024-04-11',NULL,NULL,NULL),
+(432432,'pablo','martinez','martinez@gmail.com','docente','fsdfsdf',33424,334325325,2,1,'2024-04-11','2024-04-11',NULL,NULL,NULL),
+(11295345,'marco','ortiz','marco@gmail.com','docente','$2a$04$JBCYcWRyh381HcfRvutsk.6GLm2T4xnR.7jzkETzXmbC5pgCy88p6',33424,2147483647,2,1,'2024-04-11','2024-04-11',NULL,NULL,NULL),
+(72041132,'Andrea','cavadia','andrea@gmail.com','Coordinador','$2a$04$P7UtGtll3wCikXQrxtkzIuz7MCBVrd2o.6iHbMsVsDJKB6fP6N3DC',33424,2147483647,1,1,'2024-04-28','2024-04-28',NULL,NULL,NULL),
+(123123213,'cecilia','nuñez','cecilianuñez@gmail.com','docente','hhhhhfgh',33424,322577235,1,1,'2024-04-11','2024-04-11',NULL,NULL,NULL),
+(123456789,'Daniela','castilla','daniela@gmail.com','docente','$2a$04$V/0yg6YCDfC1xNgHz3J4nuzXxldv9LusPo1FLJHfNBXA8odvjZ2vm',33424,2147483647,2,1,'2024-05-25','2024-05-25',NULL,NULL,NULL),
+(232323232,'jenifer','loteldo','mr.coco1420@gmail.com','docente','$2a$04$TZLPfU7RO0mdjFC9Tg0U4uYa3JGg7OCX9N2jjt55RJ7VV6qOwi.UG',33424,32323,2,1,'2024-06-13','2024-06-13',NULL,NULL,'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MjMyMzIzMjMyLCJyb2wiOiJkb2NlbnRlIiwiaWF0IjoxNzE4MzIyOTI2LCJleHAiOjE3MTgzNTE3MjZ9.otSxuJ5UcXxXuIVUdN-66dkLHNVIF6F_t98kFYX5ouU'),
+(2147483647,'Andres','cavadia','andrescavadiaaa@gmail.com','Coordinador','$2a$04$/uM6lEQqeXcx7XDg2lI5s.DPv2rIT0Mcs8YCQsCDiqInuqmVUNAtG',33424,2147483647,1,1,NULL,NULL,NULL,NULL,NULL);
 
 /*Table structure for table `grado` */
 
@@ -486,21 +485,6 @@ insert  into `grado`(`grado_id`,`nombre_grado`,`descripcion`,`año_escolar`,`per
 ('21321','DECIMO','tecnicos','2024-04-29 08:54:32','9a322587-6370-4daf-9a89-b8c4a3550a71',1,'2024-04-29 08:54:42','2024-06-10 22:12:51'),
 ('3233','NOVENO','NADA','2024-06-08 18:53:57','9a322587-6370-4daf-9a89-b8c4a3550a71',1,NULL,NULL);
 
-/*Table structure for table `grupo_estudiante` */
-
-DROP TABLE IF EXISTS `grupo_estudiante`;
-
-CREATE TABLE `grupo_estudiante` (
-  `grupcod` int(11) NOT NULL,
-  `estudid` int(11) NOT NULL,
-  `activo` tinyint(1) NOT NULL DEFAULT 1,
-  `createdAt` datetime NOT NULL,
-  `updatedAt` datetime NOT NULL,
-  PRIMARY KEY (`grupcod`,`estudid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-/*Data for the table `grupo_estudiante` */
-
 /*Table structure for table `grupos` */
 
 DROP TABLE IF EXISTS `grupos`;
@@ -524,7 +508,8 @@ CREATE TABLE `grupos` (
 
 insert  into `grupos`(`grupcod`,`grupsalon`,`directorFK`,`activo`,`createdAt`,`updatedAt`,`grado_FK`) values 
 (34342,'9A',11295345,1,'2024-06-08 18:49:07',NULL,'3233'),
-(76868,'10A',11295345,1,'2024-06-08 18:49:09',NULL,'21321');
+(76868,'10A',72041132,1,'2024-06-08 18:49:09','2024-06-11 20:12:08','21321'),
+(80459,'9B',33424,1,'2024-06-11 19:41:42','2024-06-11 20:00:45','21321');
 
 /*Table structure for table `horaslaboradas` */
 
@@ -575,30 +560,6 @@ insert  into `huella`(`id_huella`,`plantilla biometrica`,`estado`) values
 (43243,'sapo','nulo'),
 (123123,'dactilar','inactivo'),
 (123123213,'dactilar','activo');
-
-/*Table structure for table `notas` */
-
-DROP TABLE IF EXISTS `notas`;
-
-CREATE TABLE `notas` (
-  `codigo` int(11) NOT NULL,
-  `id_estudianteFK` int(11) DEFAULT NULL,
-  `id_asignaturaFK` int(11) DEFAULT NULL,
-  `id_evaluacionFK` varchar(36) DEFAULT NULL,
-  `nota` int(11) DEFAULT NULL,
-  `createdAt` datetime DEFAULT NULL,
-  `updatedAt` datetime DEFAULT NULL,
-  `activo` tinyint(4) DEFAULT NULL,
-  PRIMARY KEY (`codigo`),
-  KEY `id_estudianteFK` (`id_estudianteFK`),
-  KEY `id_asignaturaFK` (`id_asignaturaFK`),
-  KEY `id_evaluacionFK` (`id_evaluacionFK`),
-  CONSTRAINT `notas_ibfk_1` FOREIGN KEY (`id_estudianteFK`) REFERENCES `estudiantes` (`estudid`),
-  CONSTRAINT `notas_ibfk_2` FOREIGN KEY (`id_asignaturaFK`) REFERENCES `asignaturas` (`asigcod`),
-  CONSTRAINT `notas_ibfk_3` FOREIGN KEY (`id_evaluacionFK`) REFERENCES `tipo evaluacion` (`codigo`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
-
-/*Data for the table `notas` */
 
 /*Table structure for table `observadors` */
 
@@ -801,13 +762,13 @@ insert  into `tematicas`(`id`,`titulo`,`descripcion`,`activo`,`createdAt`,`updat
 (3232,'ingles','desarrolar actividades de plaforma anterirormente daddas',1,'2024-06-09 22:52:59','0000-00-00 00:00:00'),
 (72803,'Filosofia humana','desarrollo logico en el hombre',1,'2024-06-07 22:55:55','2024-06-07 22:55:55');
 
-/*Table structure for table `tipo evaluacion` */
+/*Table structure for table `tipo_evaluacions` */
 
-DROP TABLE IF EXISTS `tipo evaluacion`;
+DROP TABLE IF EXISTS `tipo_evaluacions`;
 
-CREATE TABLE `tipo evaluacion` (
+CREATE TABLE `tipo_evaluacions` (
   `nombre_tipo_evaluacion` varchar(100) DEFAULT NULL,
-  `codigo` varchar(36) NOT NULL,
+  `codigo` int(36) NOT NULL,
   `descripcion` varchar(100) DEFAULT NULL,
   `createdAt` datetime DEFAULT NULL,
   `updatedAt` datetime DEFAULT NULL,
@@ -815,13 +776,36 @@ CREATE TABLE `tipo evaluacion` (
   PRIMARY KEY (`codigo`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
-/*Data for the table `tipo evaluacion` */
+/*Data for the table `tipo_evaluacions` */
 
-insert  into `tipo evaluacion`(`nombre_tipo_evaluacion`,`codigo`,`descripcion`,`createdAt`,`updatedAt`,`activo`) values 
-('Trabajos','0',NULL,NULL,NULL,NULL),
-('proyectos','1234','evaluacion tematica final',NULL,NULL,NULL),
-('desempeño academico','3456','desempeño durente el periodo',NULL,NULL,NULL),
-('examenes','987','avances graficos proyecto',NULL,NULL,NULL);
+insert  into `tipo_evaluacions`(`nombre_tipo_evaluacion`,`codigo`,`descripcion`,`createdAt`,`updatedAt`,`activo`) values 
+('Trabajos',0,NULL,NULL,NULL,1),
+('examenes',987,'avances graficos proyecto',NULL,NULL,1),
+('proyectos',1234,'evaluacion tematica final',NULL,NULL,1),
+('desempeño academico',3456,'desempeño durente el periodo',NULL,NULL,1);
+
+/*Table structure for table `user_logins` */
+
+DROP TABLE IF EXISTS `user_logins`;
+
+CREATE TABLE `user_logins` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `userType` varchar(255) NOT NULL,
+  `userId` int(11) NOT NULL,
+  `loginTimestamp` datetime DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `user_logins` */
+
+insert  into `user_logins`(`id`,`userType`,`userId`,`loginTimestamp`) values 
+(1,'funcionario',72041132,'2024-06-14 16:51:09'),
+(2,'estudiante',133,'2024-06-14 16:51:36'),
+(3,'estudiante',133,'2024-06-14 16:51:47'),
+(4,'estudiante',133,'2024-06-14 17:26:39'),
+(5,'estudiante',133,'2024-06-14 17:32:47'),
+(6,'funcionario',11295345,'2024-06-15 17:03:30'),
+(7,'funcionario',11295345,'2024-06-15 18:10:34');
 
 /* Trigger structure for table `funcionario` */
 

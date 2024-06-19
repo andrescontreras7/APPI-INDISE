@@ -45,6 +45,12 @@ const Funcionario = sequelize.define(
         }
       }
     },
+    token: {
+      type: DataTypes.STRING,
+      allowNull: true,
+      
+    },
+    // 
     // Rol del funcionario (docente o coordinador)
     funcrol: {
       type: DataTypes.ENUM('docente', 'Coordinador'),

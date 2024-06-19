@@ -9,7 +9,7 @@ const asigEstudiantes = express.Router()
 
 asigEstudiantes.get('/appi/asignaturas-estudiantes',authMidd, checkRol(), getAllInformation)
 asigEstudiantes.get('/appi/asignaturas-estudiantes/:id', authMidd, checkRol() ,getInformationById)
-asigEstudiantes.get('/appi/asignaturas-estudiantes/details-estudents/:estudid',authMidd, checkRol(),getAsignaturasByEstudianteId)
+asigEstudiantes.get('/appi/asignaturas-estudiantes/details-estudents/:estudid',authMidd,getAsignaturasByEstudianteId)
 asigEstudiantes.post('/appi/asignaturas-estudiantes/create',asignaturaEstudianteValidator,authMidd, checkRol(), createAsignaturaEstudiante)
 asigEstudiantes.put('/appi/asignaturas-estudiantes/update/:id',updateAsignaturaEstudianteValidator,authMidd, checkRol(),updateAsignaturaEstudiante)
 asigEstudiantes.delete('/appi/asignaturas-estudiantes/delete/:id',authMidd, checkRol(),deleteAsignaturaEstudiante)

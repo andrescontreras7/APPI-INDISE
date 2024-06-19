@@ -4,6 +4,7 @@ const  Funcionario  = require("../models/funcionario.js")
 const {tokenSign} = require("../utils/handlejwt.js")
 const {encrypt , compare} =require("../utils/handlePassword.js")
 const { Op } = require('sequelize');
+const { sendNewUserEmail } = require('./email.controller.js');
 
 
 
@@ -66,11 +67,12 @@ const createFuncionario = async (req, res) => {
 
     // Crear el nuevo funcionario
     const datosE = await Funcionario.create({ funcid, funcnombre, funcapellido, funccorreo, funcrol, passwordFuncionario: passwordHash, jefe_areaFK, telefono, rolFK });
-
+    const contra = passwordFuncionario;
     const datafuncionarios = {
       id: funcid,
       rol: funcrol
     }
+     sendNewUserEmail(funccorreo, contra)
 
     // Generar el token
     const token = await tokenSign(datafuncionarios);
