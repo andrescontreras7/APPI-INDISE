@@ -237,6 +237,28 @@ const getEvaluacionesPorGrupoAsig = async (req, res) => {
   }
 }
 
+const getEvaluacionesPorGrupoAsigDocente = async (req, res) => {
+  const {idasig,idgrupo,idfunc}  = req.params;
+
+  try {
+      const datos_activos = await Evaluaciones.findAll({
+          where: {
+              activo: true,
+              id_funcionario:idfunc,
+              id_grupoFK: idgrupo,
+              id_asignatura: idasig
+          }
+      });
+
+      res.status(200).json(datos_activos);
+  } catch (error) {
+      console.log(error);
+      res.status(500).json({
+          message: "Ocurrió un error al recuperar los registros."
+      });
+  }
+}
+
 const getEvaluacionesEstudiantes = async (req, res) => {
   const {id_tarea}  = req.params;
   try {
@@ -293,7 +315,6 @@ const createEvaluaciones = async (req, res) =>{
     
     
  } catch (error) {
-  handleError(res, "Error al crear registro.", 400)
     console.log(error)
     
  }
@@ -345,5 +366,6 @@ module.exports = {
   getEvaluacionesPorId,
   getTipoEvaluaciones,
   getEvaluacionesEstudiantes,
-  getEvaluacionesPorGrupoAsig
+  getEvaluacionesPorGrupoAsig,
+  getEvaluacionesPorGrupoAsigDocente
 };
