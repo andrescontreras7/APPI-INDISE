@@ -1,5 +1,5 @@
 const express = require("express");
-const {getEvaluaciones ,createEvaluaciones,createEvaluacion,updateEvaluacion,getTipoEvaluaciones,getEvaluacionesPorGrupoAsig,deleteEvaluacion,getEvaluacionesPorFuncionario,getEvaluacionesPorId,getEvaluacionesEstudiantes } = require('../controller/evaluaciones.controller.js')
+const {getEvaluaciones ,createEvaluaciones,createEvaluacion,getEvaluacionesPorGrupoAsigDocente,updateEvaluacion,getTipoEvaluaciones,getEvaluacionesPorGrupoAsig,deleteEvaluacion,getEvaluacionesPorFuncionario,getEvaluacionesPorId,getEvaluacionesEstudiantes } = require('../controller/evaluaciones.controller.js')
 const  authMidd  = require('../middleware/sesion.js')
 const checkRol = require("../middleware/roles.js")
 const {createEvaluacionValidator, updateEvaluacionValidator} = require('../validator/evaluaciones.js')
@@ -29,6 +29,8 @@ EvaluacionesRouter.get("/appi/evaluaciones_por_funcionario/:id_funcionario",auth
 
 //obetener las actividades por id de grupo y asignatura
 EvaluacionesRouter.get("/appi/evaluaciones_del_estudiante/:idasig/:idgrupo",authMidd , getEvaluacionesPorGrupoAsig)
+
+EvaluacionesRouter.get("/appi/evaluaciones_del_docente/:idasig/:idgrupo/:idfunc",authMidd , getEvaluacionesPorGrupoAsigDocente)
 
 
 

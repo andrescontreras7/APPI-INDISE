@@ -4,11 +4,12 @@ const Estudiante = require("../models/estudiante.js");
 const _ = require('lodash');
 const {tokenSign} = require("../utils/handlejwt.js")
 const {encrypt , compare} =require("../utils/handlePassword.js")
-const { Op } = require('sequelize');
+const { Op,QueryTypes  } = require('sequelize');
 const generarCodigo = require('../helpers/generarCodigo.js')
 const Acudiente = require('../models/acudiente.js') //
 const Grupo = require("../models/grupo.js");
 const Grado = require("../models/grado.js");
+const { sequelize } = require("../config/mysql");
 
 /**
  * obtener usuarios de la base de datos 
@@ -42,7 +43,42 @@ const getEstudiantes = async (req,res) => {
   }
 }
 
+const getNotaEstudiante = async (req, res) => {
+  const {estudianteId} = req.params;
 
+  try {
+    // Consulta SQL original modificada para Sequelize
+    const query = `
+      SELECT asig.asignombre, ev.id_asignatura, ROUND(AVG(env.nota), 1) AS promedio_nota
+      FROM  envios env
+      INNER JOIN asignaturaestudiante asiges on asiges.asignaturaId and env.id_estudiante
+      INNER JOIN evaluaciones ev ON ev.codigo = env.id_tarea AND ev.id_asignatura = asiges.asignaturaId
+      INNER JOIN asignaturas asig ON asig.asigcod = asiges.asignaturaId
+      where env.id_estudiante =  :estudianteId 
+      GROUP BY  ev.id_asignatura, asig.asignombre
+      UNION
+      SELECT asig.asignombre ,asig.asigcod as id_asignatura , 0.0
+      FROM asignaturaestudiante asiges
+      INNER JOIN asignaturas asig ON asig.asigcod = asiges.asignaturaId
+      LEFT JOIN evaluaciones eva ON eva.id_asignatura = asiges.asignaturaId
+      LEFT JOIN envios env ON env.id_tarea = eva.codigo AND env.id_estudiante = asiges.estudianteId
+      WHERE asiges.estudianteId =  :estudianteId  AND env.id_tarea IS NULL AND  eva.codigo IS NULL;
+    `;
+
+    // Ejecutar la consulta utilizando Sequelize
+    const resultados = await sequelize.query(query, {
+      type: QueryTypes.SELECT,
+      replacements: { estudianteId: estudianteId } // Reemplaza por el parámetro correcto que corresponda al estudiante
+    });
+
+    res.status(200).json(resultados);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({
+      message: "Ocurrió un error al recuperar los registros."
+    });
+  }
+};
 
 
 /**
@@ -289,6 +325,7 @@ module.exports = {
    updateEstudiante,
    createEstudiante,
    deleteEstudiante,
-   getAllInformation
+   getAllInformation,
+   getNotaEstudiante
    
 };
