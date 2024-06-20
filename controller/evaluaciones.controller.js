@@ -293,7 +293,6 @@ const createEvaluaciones = async (req, res) =>{
     
     
  } catch (error) {
-  handleError(res, "Error al crear registro.", 400)
     console.log(error)
     
  }
